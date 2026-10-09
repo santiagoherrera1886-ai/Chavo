@@ -55,21 +55,55 @@
 
   <aside id="mapDrawer" class="drawer" aria-hidden="true">
     <div class="drawer-header"><div><span class="eyebrow">TU RECORRIDO</span><h2>La vecindad<span>.</span></h2></div><button id="closeMap" class="icon-button">×</button></div>
-    <p class="drawer-copy">Una reconstrucción artística del patio principal y el pasillo que conduce al segundo patio. Selecciona un destino para visitarlo.</p>
+    <p class="drawer-copy">Dos patios separados por un pasillo cubierto entre los apartamentos 71 y 72. Gira a la derecha para llegar al patio de la fuente; entra a las casas desde el primer patio.</p>
+    <div class="floorplan-title">PLANTA ESQUEMÁTICA · 1975 <span>NO A ESCALA</span></div>
     <div class="map-area">
-      <svg viewBox="0 0 300 340" role="img" aria-label="Plano interactivo de los dos patios">
-        <rect x="30" y="100" width="240" height="198" rx="4" fill="#d6b58a" fill-opacity=".18" stroke="#d6b58a" stroke-width="3"/>
-        <rect x="30" y="100" width="240" height="27" fill="#9b7554" fill-opacity=".7"/>
-        <rect x="42" y="103" width="57" height="21" rx="2" fill="#b97b50"/><rect x="112" y="103" width="48" height="21" rx="2" fill="#b97b50"/><rect x="210" y="103" width="47" height="21" rx="2" fill="#b97b50"/>
-        <rect x="169" y="100" width="31" height="49" fill="#293d38" stroke="#d6b58a" stroke-dasharray="3,4"/>
-        <path d="M171 100 V19 H290 V100" stroke="#d6b58a" stroke-width="3" fill="none"/>
-        <rect x="185" y="22" width="87" height="64" fill="#d6b58a" fill-opacity=".15" stroke="#d6b58a" stroke-dasharray="4,4"/>
-        <rect x="43" y="141" width="40" height="75" fill="#9b7554" fill-opacity=".55"/>
-        <g fill="#f5ecda" font-size="10" font-family="Arial" text-anchor="middle"><text x="72" y="117">14</text><text x="135" y="117">71</text><text x="234" y="117">72</text><text x="55" y="178">23 ↑</text><text x="237" y="59" font-size="8">2º PATIO</text><text x="150" y="286" font-size="8" letter-spacing="2">PORTÓN</text></g>
-        <circle cx="144" cy="224" r="15" fill="#734c34" stroke="#e6c08a" stroke-width="2"/><circle cx="144" cy="224" r="9" fill="#b58555"/>
-        <circle id="playerMap" cx="150" cy="270" r="6" fill="#f3e6d1" stroke="#334c40" stroke-width="3"/>
+      <svg viewBox="0 0 400 400" role="img" aria-label="Esquema de la vecindad: primer patio abajo a la izquierda, pasillo que gira a la derecha y segundo patio separado arriba a la derecha.">
+        <defs>
+          <pattern id="mosaic" width="11" height="11" patternUnits="userSpaceOnUse"><path d="M0 0H11V11H0Z" fill="#28392f"/><path d="M0 11L11 0" stroke="#425445" stroke-width=".5"/></pattern>
+          <pattern id="water" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 7Q3 1 7 7" fill="none" stroke="#b4d7cc" stroke-opacity=".33" stroke-width="1"/></pattern>
+        </defs>
+        <rect x="21" y="205" width="158" height="175" rx="3" stroke="#ddc49c" stroke-width="3" fill="url(#mosaic)"/>
+        <text x="100" y="223" fill="#f6e0ba" text-anchor="middle" font-size="10" letter-spacing="1.2" font-weight="bold">01 · PATIO PRINCIPAL</text>
+        <rect x="33" y="226" width="21" height="67" rx="1" fill="#a88e72" stroke="#cfb18e" stroke-width="1.4"/>
+        <text x="44" y="263" text-anchor="middle" font-size="10" fill="#1f3126" font-weight="bold">23</text>
+        <text x="45" y="300" font-size="8" fill="#c8b49b" text-anchor="middle">ESCALERAS</text>
+        <circle cx="99" cy="299" r="12" fill="#81583c" stroke="#d2a46e" stroke-width="2"/>
+        <circle cx="99" cy="299" r="6" fill="#b08456"/>
+        <text x="99" y="324" font-size="9" fill="#f4d8aa" text-anchor="middle">BARRIL</text>
+        <rect x="39" y="197" width="34" height="11" rx="1" fill="#659b86" stroke="#f0d7a3" stroke-width="1"/>
+        <rect x="78" y="197" width="39" height="11" rx="1" fill="#c08f4b" stroke="#f0d7a3" stroke-width="1"/>
+        <rect x="150" y="197" width="24" height="11" rx="1" fill="#c08f4b" stroke="#f0d7a3" stroke-width="1"/>
+        <g fill="#26382d" font-size="9" text-anchor="middle" font-weight="bold"><text x="56" y="205">14</text><text x="98" y="205">71</text><text x="162" y="205">72</text></g>
+        <rect x="81" y="365" width="40" height="15" fill="#b5a183" stroke="#e4d0a3"/>
+        <text x="101" y="375" fill="#283a2e" text-anchor="middle" font-size="7" font-weight="bold">PORTÓN</text>
+        <text x="100" y="352" font-size="8" fill="#b5c6b3" text-anchor="middle">LAVADERO · MACETAS</text>
+        <!-- Corredor cubierto, exclusivamente entre los departamentos 71 y 72 -->
+        <path d="M123 201 L123 135 L260 135" fill="none" stroke="#e4c79a" stroke-width="22" stroke-linejoin="miter" stroke-opacity=".24"/>
+        <path d="M123 201 L123 135 L260 135" fill="none" stroke="#e4c79a" stroke-width="1.6" stroke-dasharray="4,4"/>
+        <rect x="121" y="153" width="24" height="10" fill="#23392d"/>
+        <path d="M134 183V148H228" fill="none" stroke="#f4d1a0" stroke-width="2" stroke-dasharray="4,5"/>
+        <path d="M220 142L230 148L220 154" fill="none" stroke="#f4d1a0" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <text x="130" y="170" text-anchor="middle" fill="#ead7b9" font-size="7" transform="rotate(-90 130 170)">PASILLO</text>
+        <text x="185" y="123" fill="#ddbb8b" text-anchor="middle" font-size="9" font-weight="bold">GIRA A LA DERECHA →</text>
+        <rect x="242" y="25" width="145" height="146" rx="3" fill="#223b38" stroke="#cdb58c" stroke-width="3"/>
+        <text x="314" y="43" fill="#f2dfbc" text-anchor="middle" font-size="11" letter-spacing="1.2" font-weight="bold">02 · OTRO PATIO</text>
+        <rect x="254" y="48" width="119" height="17" fill="#54634f" stroke="#927c61" stroke-width="1"/>
+        <text x="314" y="59" fill="#e8dfc9" font-size="8" text-anchor="middle">VIVIENDAS Y GALERÍA</text>
+        <circle cx="314" cy="95" r="20" fill="url(#water)" stroke="#bbd3cf" stroke-width="4"/>
+        <circle cx="314" cy="95" r="8" fill="#5e8989" stroke="#c6d3c2" stroke-width="1.5"/>
+        <text x="314" y="126" font-size="9" fill="#bcd6d4" text-anchor="middle">FUENTE</text>
+        <rect x="245" y="158" width="14" height="19" fill="#c7ab80"/>
+        <text x="293" y="156" font-size="8" fill="#dec9a7">ENTRADA DESDE PASILLO</text>
+        <g fill="#f3e2c0" font-family="Arial" font-size="9"><text x="21" y="391">INTERIORES: 14 / 71 / 72</text><text x="386" y="391" text-anchor="end">RECREACIÓN INTERPRETATIVA</text></g>
+        <circle id="playerMap" cx="100" cy="340" r="6" fill="#f5dbc4" stroke="#253c30" stroke-width="3"/>
       </svg>
     </div>
+    <div class="patio-actions">
+      <button id="goPatioOne" type="button">↗ VOLVER AL PATIO 1</button>
+      <button id="goPatioTwo" type="button">↗ VISITAR PATIO 2</button>
+    </div>
+    <p class="floorplan-note">Patios independientes unidos por un corredor con giro. El tercer patio, escasamente documentado, no se representa como espacio visitable.</p>
     <div class="place-heading">LUGARES POR DESCUBRIR <span id="visitedCount">0 / 8</span></div>
     <div id="places" class="places"></div>
     <div class="drawer-end">HECHO CON NOSTALGIA · FAN EXPERIENCE</div>

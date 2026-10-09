@@ -1,0 +1,27 @@
+/* October 2026 / visible V2 of the historical-set renovation */
+.intro-reference-shot{position:absolute;inset:0;background-image:url('https://s.yimg.com/lo/mysterio/api/00a0b83331d105e181d612ffefec994b5b484b3e601ea7785947d57f3fa8a690/lightyear_networkapi/resizefill_w976%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fes%2Flanacion.com.ar%2F2600abc32846a6dac3a32a8607b9f946');background-size:cover;background-position:center;filter:saturate(.82) contrast(1.08) brightness(.88)}
+.intro-shade{background:linear-gradient(90deg,rgba(11,25,20,.98) 0%,rgba(15,26,21,.95) 27%,rgba(15,26,22,.66) 52%,rgba(10,16,14,.12) 100%)}
+.intro .intro-top{color:#f5d3a5}
+.intro .chapter{color:#e0b687}
+.intro-content::after{content:'EL PATIO ORIGINAL · FOTOGRAFÍA DE REFERENCIA';position:absolute;bottom:-65px;left:0;font-size:8px;letter-spacing:2px;color:#e2c9a7ad}
+.scene-shortcuts{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:21px}
+.scene-chip{pointer-events:auto;background:#d5b88d;color:#25352b;border:1px solid #d5b88d;border-radius:3px;padding:10px 14px;font-size:9px;letter-spacing:1.15px;font-weight:800;transition:.18s}
+.scene-chip:hover{background:#f1d8ad}
+.scene-chip.secondary-chip{background:rgba(23,31,27,.72);color:#f0e1ca;border-color:#ddcba76b}
+.scene-chip.secondary-chip:hover{background:#3e493e}
+.bottom-title{max-width:min(640px,52vw)}
+.bottom-title h2{font-size:clamp(30px,3.45vw,47px)}
+.bottom-ui{bottom:69px}
+.reference-overlay{position:fixed;inset:0;z-index:60;background:rgba(5,15,12,.81);display:none;align-items:center;justify-content:center;padding:35px;backdrop-filter:blur(9px)}
+.reference-overlay.open{display:flex}
+.reference-window{position:relative;overflow-y:auto;max-height:min(95vh,900px);width:min(950px,100%);background:#17281f;border:1px solid #dec39856;padding:22px 26px 27px;box-shadow:0 24px 70px #0008}
+.reference-window>button{position:absolute;right:15px;top:12px;border:1px solid #dec39880;background:rgba(0,0,0,.23);color:#fff;border-radius:50%;width:34px;height:34px;font-size:22px}
+.reference-eyebrow{font-size:9px;letter-spacing:2.5px;color:#e9bd82;margin:7px 40px 5px 0}
+.reference-window h2{font-family:'Playfair Display',serif;font-weight:400;font-size:32px;letter-spacing:-1px;margin:10px 0 16px}
+.reference-window h2 span{color:#dcbd91}
+.reference-window img{width:100%;max-height:55vh;object-fit:contain;display:block;background:#26382f}
+.reference-window p{font-size:12px;line-height:1.8;color:#c3c6b8}
+.reference-window a{font-size:11px;color:#eac598;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:1050px){.bottom-title{max-width:53vw}.scene-shortcuts{gap:6px}.scene-chip{padding:8px;font-size:8px}.bottom-ui{bottom:55px}.bottom-controls{gap:7px}}
+@media(max-width:650px){.bottom-title{max-width:58vw}.bottom-title h2{font-size:26px}.bottom-title p{font-size:10px}.bottom-ui{bottom:24px;gap:8px}.scene-shortcuts{gap:5px;margin-top:11px}.scene-chip{padding:7px 8px;font-size:8px;letter-spacing:.1px}.topbar .top-actions{gap:4px}.topbar .top-actions .icon-button{width:29px;height:29px;font-size:15px}.reference-overlay{padding:10px}.reference-window{padding:17px 14px}.reference-window h2{font-size:25px}.reference-window img{max-height:60vh}.intro-content::after{display:none}}
+@media(max-height:680px){.bottom-ui{bottom:25px}.scene-shortcuts{margin-top:9px}.scene-chip{padding:7px}}

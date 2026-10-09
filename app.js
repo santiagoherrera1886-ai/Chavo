@@ -1,14 +1,16 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 import { addInteriors } from './interiors.js';
+import { renovateSet } from './realism.js';
 
 const $ = id => document.getElementById(id);
 const mobile = matchMedia('(pointer:coarse)').matches;
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#b5c1b8');
-scene.fog = new THREE.FogExp2(0xb4bbaa,0.008);
-const camera = new THREE.PerspectiveCamera(69, innerWidth/innerHeight,.08,300);
-camera.position.set(0,1.7,10.8);
-let yaw=0,pitch=-.075,night=false,entered=false,paused=false,ambientOn=false,tourIndex=-1,nearby=null;
+scene.background = new THREE.Color('#aab3a5');
+scene.fog = new THREE.FogExp2(0xb8b5a8,0.006);
+const camera = new THREE.PerspectiveCamera(61, innerWidth/innerHeight,.08,300);
+// Start INSIDE the courtyard, past the gate and facing its iconic set.
+camera.position.set(1.35,1.68,5.15);
+let yaw=.11,pitch=-.035,night=false,entered=false,paused=false,ambientOn=false,tourIndex=-1,nearby=null;
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
 const renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance',preserveDrawingBuffer:true});
@@ -17,7 +19,7 @@ renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.47;
+renderer.toneMappingExposure=1.23;
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 $('scene').appendChild(renderer.domElement);
 const clock=new THREE.Clock();
@@ -117,7 +119,14 @@ box(8.95,7.2,.5,7.6,3.6,13.35,beige);
 box(6.35,2.45,.5,0,5.975,13.35,beige);
 box(.67,5.3,.75,-3.1,2.65,13.35,material('#ccb083'));
 box(.67,5.3,.75,3.1,2.65,13.35,material('#ccb083'));
-for(let i=0;i<2;i++){const x=i===0?-2.47:2.47;const gate=box(.15,3.4,2.6,x,1.75,11.93,metal);gate.rotation.y=i===0?-.58:.58;for(let j=0;j<6;j++){let pole=barBetween(x-.5+j*.2,.15,11.8,x-.5+j*.2,3.4,11.8,.016,metal)}}
+// The old gate was modeled as two huge opaque slabs, causing the black
+// triangle that obscured the right side of the screenshot. Keep slim ironwork
+// by the entrance instead, outside the main line of sight.
+for(let n=0;n<5;n++){
+ const dx=n*.16;
+ barBetween(-3.04+dx,.23,13.04,-3.04+dx,3.30,13.04,.019,metal);
+ barBetween(3.04-dx,.23,13.04,3.04-dx,3.30,13.04,.019,metal);
+}
 // Rear facade includes gap between 71 & 72
 // Facades with real human-sized openings under their door frames.
 // 14 and 71: separate fragments instead of one impassable facade.
@@ -209,14 +218,14 @@ crate(-11.05,2.5,.12);crate(10.85,-10.9,.3);
 function ball(x,y,z,rad){const m=[];for(const c of ['#cf9c3c','#498d9d','#cb4e39','#f0d179','#7f9a53','#e5a35b'])m.push(material(c,.8));const ob=mesh(new THREE.SphereGeometry(rad,24,16,0,Math.PI*2,0,Math.PI),m[0]);ob.position.set(x,y,z);for(let i=0;i<6;i++){const arc=mesh(new THREE.SphereGeometry(rad*1.005,16,12,i*Math.PI/3,Math.PI/3),m[i]);arc.position.set(x,y,z)}}
 ball(-5.6,.42,-6,.42);
 // Hanging laundry and clothes line
-barBetween(-11.5,4.65,5.8,10.5,4.95,5.8,.009,material('#897965'));
+barBetween(-11.5,3.81,-9.28,10.5,4.00,-9.28,.009,material('#897965'));
 function garment(x,y,z,color,w=.87,h=1.1){
  const mat=new THREE.MeshStandardMaterial({color,roughness:1,side:THREE.DoubleSide});
  const shape=new THREE.Shape();shape.moveTo(-w*.34,0);shape.lineTo(w*.34,0);shape.lineTo(w*.65,-.25);shape.lineTo(w*.46,-.48);shape.lineTo(w*.38,-.34);shape.lineTo(w*.43,-h);shape.lineTo(-w*.43,-h);shape.lineTo(-w*.38,-.34);shape.lineTo(-w*.46,-.48);shape.lineTo(-w*.65,-.25);shape.closePath();
  const g=mesh(new THREE.ShapeGeometry(shape),mat);g.position.set(x,y,z);g.rotation.y=r(-.18,.18);return g;
 }
-const hanging=[garment(-8.5,4.63,5.8,'#bf7b75'),garment(-6.2,4.68,5.8,'#d3bba0'),garment(-4,4.72,5.8,'#7b998b'),garment(-1.9,4.76,5.8,'#e2cbb0')];
-for(let x of [-8.65,-8.4,-6.33,-6.08,-4.13,-3.88,-2.03,-1.78])box(.04,.16,.065,x,4.65,5.8,woodDark);
+const hanging=[garment(-3.6,3.86,-9.28,'#bf7b75'),garment(5.85,3.96,-9.28,'#d3bba0'),garment(7.38,3.98,-9.28,'#7b998b'),garment(9.1,4.0,-9.28,'#e2cbb0')];
+for(let x of [-3.72,-3.47,5.72,5.97,7.26,7.51,9.01,9.21])box(.04,.16,.065,x,3.95,-9.28,woodDark);
 // Wall lanterns
 const lanterns=[],lampLights=[];
 function lantern(x,y,z){const m=material('#292b28',.5,.65);box(.3,.43,.26,x,y,z,m);const bulb=box(.18,.29,.12,x,y,z+.15,new THREE.MeshStandardMaterial({color:'#ffc88a',emissive:'#e8a95a',emissiveIntensity:.18,roughness:.45}));const light=new THREE.PointLight(0xffb977,0,12,2);light.position.set(x,y,z+1);scene.add(light);lanterns.push(bulb);lampLights.push(light)}
@@ -251,11 +260,17 @@ cyl(.55,.8,1.3,4.4,1.25,-29.1,material('#bdb49d'),26);
 cyl(.73,.5,.2,4.4,2.0,-29.1,material('#c9c3a9'),26);
 const ripple1=mesh(new THREE.TorusGeometry(.55,.015,5,48),new THREE.MeshBasicMaterial({color:'#d1f0e7',transparent:true,opacity:.5}));ripple1.rotation.x=Math.PI/2;ripple1.position.set(4.4,.695,-29.1);
 const ripple2=ripple1.clone();scene.add(ripple2);ripple2.position.set(4.4,.698,-29.1);
+// Updated studio-era set: cracked flagstones, real curtain lace, stained plaster,
+// flowering staircase, hanging laundry and detailed period fittings.
+const version2=renovateSet({
+ THREE,scene,renderer,box,mesh,cyl,barBetween,material,hanging,lanterns,
+ materials:{greenStucco,ochre,beige,redStucco,floorMat,wood:paintedWood,metal}
+});
 // Secondary patio features
 barrel(10.85,-32.5,.86);
 crate(-3.8,-32,.55);
-const sun=new THREE.DirectionalLight(0xffe3ae,4.0);sun.position.set(-19,35,19);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-50;sun.shadow.camera.right=50;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;sun.shadow.bias=-.00025;sun.shadow.normalBias=.018;scene.add(sun,sun.target);sun.target.position.set(0,0,-12);
-const hemi=new THREE.HemisphereLight(0xd4eaff,0x745b43,2.1);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffe4bd,2.7);sun.position.set(-19,35,19);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-50;sun.shadow.camera.right=50;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;sun.shadow.bias=-.00025;sun.shadow.normalBias=.018;scene.add(sun,sun.target);sun.target.position.set(0,0,-12);
+const hemi=new THREE.HemisphereLight(0xd8e0de,0x665944,1.3);scene.add(hemi);
 const ambient=new THREE.AmbientLight(0xffffff,.23);scene.add(ambient);
 // Sky dome
 const sky=new THREE.Mesh(new THREE.SphereGeometry(170,32,16),new THREE.ShaderMaterial({
@@ -305,8 +320,8 @@ $('closeModal').onclick=closeInfo;$('modalBackdrop').addEventListener('click',e=
 $('nextPlace').onclick=()=>{let n=(places.indexOf(places.find(p=>p.title===$('storyTitle').textContent))+1)%places.length;closeInfo();teleport(places[n]);openInfo(places[n])};
 $('timeBtn').onclick=()=>{
  night=!night;$('timeBtn').textContent=night?'☀':'☾';$('timeBtn').classList.toggle('selected',night);
- sun.intensity=night?.12:4;hemi.intensity=night?.42:2.1;ambient.intensity=night?.3:.23;renderer.toneMappingExposure=night?1.12:1.47;
- scene.fog.color.set(night?'#1b2633':'#b4bbaa');scene.background.set(night?'#192537':'#b5c1b8');sky.material.uniforms.uNight.value=night?1:0;
+ sun.intensity=night?.12:2.7;hemi.intensity=night?.42:1.3;ambient.intensity=night?.3:.23;renderer.toneMappingExposure=night?1.04:1.23;
+ scene.fog.color.set(night?'#1b2633':'#b8b5a8');scene.background.set(night?'#192537':'#aab3a5');sky.material.uniforms.uNight.value=night?1:0;
  lampLights.forEach(l=>l.intensity=night?7:0);lanterns.forEach(b=>b.material.emissiveIntensity=night?3:.18);
  toast(night?'MODO NOCHE ACTIVADO':'VOLVIMOS A LA TARDE');
 };
@@ -321,10 +336,15 @@ $('photoBtn').onclick=()=>{renderer.render(scene,camera);const link=document.cre
 function showHelp(){$('helpModal').classList.add('open');paused=true;if(document.pointerLockElement)document.exitPointerLock()}
 function hideHelp(){$('helpModal').classList.remove('open');paused=false}
 $('helpBtn').onclick=showHelp;$('helpClose').onclick=hideHelp;$('helpDone').onclick=hideHelp;
-function enter(){entered=true;$('intro').classList.add('leave');if(mobile)$('mobileHud').classList.add('active');else renderer.domElement.requestPointerLock?.();toast('BIENVENIDO A LA VECINDAD · USA W A S D PARA CAMINAR')}
+function resetCamera(){
+ camera.position.set(1.35,1.68,5.15);yaw=.11;pitch=-.035;camera.rotation.set(pitch,yaw,0);
+ toast('CÁMARA REUBICADA · PATIO DE 1975');
+}
+$('recenterBtn')?.addEventListener('click',resetCamera);
+function enter(){resetCamera();entered=true;$('intro').classList.add('leave');if(mobile)$('mobileHud').classList.add('active');else renderer.domElement.requestPointerLock?.();toast('BIENVENIDO A LA VECINDAD · USA W A S D PARA CAMINAR')}
 $('enterBtn').onclick=enter;
 renderer.domElement.addEventListener('click',()=>{if(entered&&!mobile&&!paused&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.()});
-document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement&&!paused){yaw-=e.movementX*.0022;pitch=Math.max(-1.25,Math.min(1.25,pitch-e.movementY*.00185))}});
+document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement&&!paused){yaw-=e.movementX*.0022;pitch=Math.max(-.70,Math.min(.60,pitch-e.movementY*.00185))}});
 const keys=new Set();
 document.addEventListener('keydown',e=>{
  if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
@@ -344,7 +364,7 @@ function joystickEnd(e){if(e.pointerId!==joyId)return;joyId=null;joyX=joyY=0;kno
 joystick.addEventListener('pointerup',joystickEnd);joystick.addEventListener('pointercancel',joystickEnd);
 let touchLook=null;
 renderer.domElement.addEventListener('pointerdown',e=>{if(!mobile||!entered)return;if(e.clientX<innerWidth*.36)return;touchLook={id:e.pointerId,x:e.clientX,y:e.clientY};renderer.domElement.setPointerCapture(e.pointerId)});
-renderer.domElement.addEventListener('pointermove',e=>{if(!touchLook||touchLook.id!==e.pointerId)return;yaw-=(e.clientX-touchLook.x)*.007;pitch=Math.max(-1.3,Math.min(1.3,pitch-(e.clientY-touchLook.y)*.006));touchLook.x=e.clientX;touchLook.y=e.clientY});
+renderer.domElement.addEventListener('pointermove',e=>{if(!touchLook||touchLook.id!==e.pointerId)return;yaw-=(e.clientX-touchLook.x)*.007;pitch=Math.max(-.70,Math.min(.60,pitch-(e.clientY-touchLook.y)*.006));touchLook.x=e.clientX;touchLook.y=e.clientY});
 renderer.domElement.addEventListener('pointerup',e=>{if(touchLook?.id===e.pointerId)touchLook=null});
 $('mobileInteract').onclick=()=>{if(nearby)openInfo(nearby);else toast('ACÉRCATE A UNA PUERTA O A UN OBJETO BRILLANTE')};
 const headSpace=1.7;

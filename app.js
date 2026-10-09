@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+import { addInteriors } from './interiors.js';
 
 const $ = id => document.getElementById(id);
 const mobile = matchMedia('(pointer:coarse)').matches;
@@ -66,17 +67,30 @@ function sign(text,width=.65,height=.42,color='#eedbb1'){
  const o=mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshStandardMaterial({map:t,roughness:.86,side:THREE.DoubleSide}));return o;
 }
 function stuccoWall(x,z,w,h,mat,d=.38){return box(w,h,d,x,h/2,z,mat)}
+// Opening doors and physical passable doorframes: real walk-in apartments.
+const entryDoors=[];
 function door(x,z,num,col='#625048',y=0,turn=0){
  const group=new THREE.Group();group.position.set(x,y,z);group.rotation.y=turn;scene.add(group);
- box(1.65,2.67,.18,0,1.39,0,material(col,.84),group);
- const panel=material('#4c3830');
- for(const yy of [.74,1.74]){box(1.26,.83,.034,0,yy,.111,panel,group);box(1.1,.69,.042,0,yy,.139,material(col,.87),group)}
- for(const xx of [-.73,.73]) box(.084,2.8,.21,xx,1.4,.04,paintedWood,group);
- box(1.63,.1,.22,0,2.79,.04,paintedWood,group);
- box(1.83,.16,.7,0,2.9,.05,terracotta,group);
- const s=sign(String(num),.57,.33);group.add(s);s.position.set(0,2.4,.125);
- const knob=new THREE.Mesh(new THREE.SphereGeometry(.066,12,8),material('#b99a5a',.3,.7));group.add(knob);knob.position.set(.58,1.27,.15);
- const step=new THREE.Mesh(new THREE.BoxGeometry(1.96,.14,.62),material('#aea395'));group.add(step);step.position.set(0,.07,.35);step.receiveShadow=true;
+ const hinge=new THREE.Group();hinge.position.x=-.76;group.add(hinge);
+ const leaf=(w,h,d,xx,yy,zz,mat)=>box(w,h,d,xx,yy,zz,mat,hinge);
+ leaf(1.48,2.67,.13,.76,1.38,0,material(col,.8));
+ for(let yy of [.7,1.76]){
+   leaf(1.17,.84,.03,.76,yy,.085,material('#4c372b',.85));
+   leaf(1.06,.72,.038,.76,yy,.113,material(col,.89));
+ }
+ // Plain white house numbers painted on wooden door, not a detached plaque.
+ const canvas=document.createElement('canvas');canvas.width=160;canvas.height=110;
+ const ctx=canvas.getContext('2d');ctx.clearRect(0,0,160,110);
+ ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#eee4d0';ctx.font='bold 74px Georgia';
+ ctx.fillText(String(num),80,56);const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;
+ const plate=mesh(new THREE.PlaneGeometry(.54,.35),new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.93,depthWrite:false,side:THREE.DoubleSide}),hinge);
+ plate.position.set(.76,2.2,.137);
+ for(const xx of [-.8,.8]) box(.105,2.82,.23,xx,1.41,.04,paintedWood,group);
+ box(1.73,.11,.27,0,2.8,.04,paintedWood,group);
+ box(1.92,.12,.57,0,2.94,.04,terracotta,group);
+ const knob=mesh(new THREE.SphereGeometry(.057,12,8),material('#ab925f',.35,.65),hinge);knob.position.set(1.35,1.25,.16);
+ box(1.7,.06,.44,0,.03,.15,material('#a9a092'),group);
+ entryDoors.push({num,x,z,pivot:hinge,angle:0});
  return group;
 }
 function windowAt(x,z,wide=1.7,turn=0,y=2){
@@ -105,8 +119,18 @@ box(.67,5.3,.75,-3.1,2.65,13.35,material('#ccb083'));
 box(.67,5.3,.75,3.1,2.65,13.35,material('#ccb083'));
 for(let i=0;i<2;i++){const x=i===0?-2.47:2.47;const gate=box(.15,3.4,2.6,x,1.75,11.93,metal);gate.rotation.y=i===0?-.58:.58;for(let j=0;j<6;j++){let pole=barBetween(x-.5+j*.2,.15,11.8,x-.5+j*.2,3.4,11.8,.016,metal)}}
 // Rear facade includes gap between 71 & 72
-box(15.25,7.35,.55,-4.48,3.675,-12.1,beige);
-box(6.22,7.35,.55,9.1,3.675,-12.1,ochre);
+// Facades with real human-sized openings under their door frames.
+// 14 and 71: separate fragments instead of one impassable facade.
+box(4.30,7.35,.55,-9.95,3.675,-12.1,greenStucco);
+box(4.15,7.35,.55,-3.825,3.675,-12.1,greenStucco);
+box(3.02,7.35,.55,1.64,3.675,-12.1,ochre);
+// lintels above door openings (2.85 m clearance)
+box(1.9,4.50,.55,-6.85,5.10,-12.1,greenStucco);
+box(1.9,4.50,.55,-.8,5.10,-12.1,ochre);
+// Casa 72 — opening around door 72
+box(2.09,7.35,.55,7.035,3.675,-12.1,ochre);
+box(2.28,7.35,.55,11.07,3.675,-12.1,ochre);
+box(1.85,4.50,.55,9.0,5.10,-12.1,ochre);
 box(2.8,2.3,.55,4.3,6.2,-12.1,ochre);
 box(.34,4.2,.55,2.9,2.1,-12.1,beige);
 box(.34,4.2,.55,5.7,2.1,-12.1,ochre);
@@ -115,8 +139,12 @@ box(25.5,.3,1.12,0,7.4,-11.87,roofMat);
 box(25.8,.23,1.55,0,7.61,-12,material('#876a53'));
 for(const xx of [-9.6,-4.6,.9,7.65,11.2]){box(.22,7.2,.67,xx,3.65,-11.87,material('#c9a77c'))}
 // wall base skirting red
-box(15.1,.82,.11,-4.65,.42,-11.74,redStucco);
-box(6.12,.82,.11,9.0,.42,-11.74,redStucco);
+// Skirting must also leave thresholds fully open.
+box(4.27,.82,.11,-9.96,.42,-11.74,redStucco);
+box(4.11,.82,.11,-3.83,.42,-11.74,redStucco);
+box(2.99,.82,.11,1.63,.42,-11.74,redStucco);
+box(2.06,.82,.11,7.04,.42,-11.74,redStucco);
+box(2.23,.82,.11,11.08,.42,-11.74,redStucco);
 box(.14,.83,26.5,-11.84,.42,0,redStucco);
 box(.14,.83,26.5,11.84,.42,0,redStucco);
 // Door facades
@@ -209,6 +237,8 @@ door(-1.35,-36.84,11,'#58473f');
 door(8.3,-36.84,21,'#58473f');
 windowAt(1.2,-36.8,2.1,0,2.3);
 for(let i=0;i<12;i++){const a=i*Math.PI*2/12;const xx=4.4+6.5*Math.cos(a),zz=-28.5+6.5*Math.sin(a);if(Math.abs(xx-4.4)>1.5)planter(xx,zz,r(.6,.95))}
+// Fully explorable apartments 14, 71, 72, with period-specific furniture.
+const interiorWorld=addInteriors({THREE,scene,mesh,box,cyl,material,barBetween});
 const water=new THREE.MeshPhysicalMaterial({color:'#78a49f',roughness:.1,metalness:.12,transparent:true,opacity:.82,clearcoat:.9});
 cyl(2.3,2.4,.6,4.4,.28,-29.1,material('#b6ae96'),40);
 cyl(1.92,1.92,.08,4.4,.63,-29.1,water,40);
@@ -310,14 +340,32 @@ renderer.domElement.addEventListener('pointermove',e=>{if(!touchLook||touchLook.
 renderer.domElement.addEventListener('pointerup',e=>{if(touchLook?.id===e.pointerId)touchLook=null});
 $('mobileInteract').onclick=()=>{if(nearby)openInfo(nearby);else toast('ACÉRCATE A UNA PUERTA O A UN OBJETO BRILLANTE')};
 const headSpace=1.7;
+function whichApartment(x,z){
+ if(z > -11.50||z < -19.01)return null;
+ if(x>-10.83&&x<-3.79)return '14';
+ if(x>-3.30&&x<2.42)return '71';
+ if(x>6.12&&x<11.92)return '72';
+ return null;
+}
 function allowed(x,z){
- if(z>=-11.5&&z<=12.2&&x>=-11.45&&x<=11.45){
-  if(x<-8.05 && z<-2.1 && z>-10.8)return false; // staircase footprint
+ // Courtyard with clearances around the barrel and the concrete stairs.
+ if(z>=-11.48&&z<=12.2&&x>=-11.45&&x<=11.45){
+  if(x<-8.05 && z<-2.1 && z>-10.8)return false;
   if(Math.hypot(x+.45,z+1.4)<1.09)return false;
   return true;
  }
+ // The walls are solid except for the three 1.6 m doorways.
+ if(z>=-12.57&&z< -11.48){
+  if([[-6.85,.68],[-.8,.68],[9,.68],[4.45,1.13]].some(([cx,half])=>Math.abs(x-cx)<half))return true;
+  return false;
+ }
+ if(whichApartment(x,z))return true;
+ // Side corridor connecting both patios.
  if(x>3.35&&x<5.55&&z<=-11.2&&z>=-20.15)return true;
- if(z<-19.1&&z>-36.5&&x>-4.1&&x<12.9){if(Math.hypot(x-4.4,z+29.1)<2.45)return false;return true}
+ if(z<-19.1&&z>-36.5&&x>-4.1&&x<12.9){
+  if(Math.hypot(x-4.4,z+29.1)<2.45)return false;
+  return true;
+ }
  return false;
 }
 let elapsed=0;
@@ -335,13 +383,22 @@ function update(delta,t){
  }else camera.position.y=THREE.MathUtils.lerp(camera.position.y,headSpace,Math.min(1,delta*5));
  }
  camera.rotation.set(pitch,yaw,0);
+ // Open apartment doors inward when approached; close gradually when leaving.
+ for(const entry of entryDoors){
+  const d=Math.hypot(camera.position.x-entry.x,camera.position.z-entry.z);
+  const target=entered&&entry.num!==23&&d<3.0?1.35:0;
+  entry.angle=THREE.MathUtils.damp(entry.angle,target,4.2,delta);
+  entry.pivot.rotation.y=entry.angle;
+ }
  elapsed+=delta;
  if(elapsed>.1){elapsed=0;nearby=null;let closest=3.6;const dir=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
  for(const p of places){let dx=p.x-camera.position.x,dz=p.z-camera.position.z,dist=Math.hypot(dx,dz);if(dist<closest&&((dx*dir.x+dz*dir.z)/Math.max(dist,.1)>.1||dist<1.65)){nearby=p;closest=dist}}
  $('interaction').classList.toggle('active',!!nearby&&entered&&!paused);if(nearby)$('interactionTitle').textContent=nearby.title;
- const other=camera.position.z<-18;$('locationLabel').textContent=other?'SEGUNDO PATIO':camera.position.z<-11.5?'EL PASILLO':'PATIO PRINCIPAL';
- $('areaTitle').innerHTML=other?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
- $('areaText').textContent=other?'Más allá del pasillo, otra historia.':'Un lugar pequeño. Un millón de historias.';
+ const apt=whichApartment(camera.position.x,camera.position.z);
+ const other=camera.position.z<-19.0&&!apt;
+ $('locationLabel').textContent=apt?'INTERIOR · CASA '+apt:other?'SEGUNDO PATIO':camera.position.z<-11.5?'EL PASILLO':'PATIO PRINCIPAL';
+ $('areaTitle').innerHTML=apt?'Dentro de la casa '+apt+'<span>.</span>':other?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
+ $('areaText').textContent=apt==='72'?'Don Ramón y la Chilindrina · sala, comedor y dormitorio':apt==='14'?'Doña Florinda y Quico · recreación de época':apt==='71'?'Doña Clotilde · interior de interpretación artística':other?'Más allá del pasillo, otra historia.':'Un lugar pequeño. Un millón de historias.';
  const mapX=150+camera.position.x*8,mapY=other?100+(camera.position.z+12)*3.7:100+(camera.position.z+12)*7.55;
  $('playerMap').setAttribute('cx',Math.max(20,Math.min(280,mapX)));$('playerMap').setAttribute('cy',Math.max(15,Math.min(312,mapY)));
  }

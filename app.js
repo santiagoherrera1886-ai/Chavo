@@ -131,8 +131,7 @@ windowAt(11.0,-11.75,1.22,0,2.3);
 windowAt(-1.2,7.2,1.6,Math.PI,3.95);
 // stairway to #23 at left
 const stairStone=material('#777574'),stairFront=material('#956955');
-box(3.5,3.42,8.6,-9.85,1.7,-7.3,stairFront);
-for(let i=0;i<13;i++){let y=(i+.55)*.245;let z=-1.9-i*.56;box(2.84,.22,.61,-9.72,y,z,stairStone)}
+for(let i=0;i<13;i++){let y=(i+1)*.245;let z=-1.9-i*.56;box(2.84,y,.565,-9.72,y/2,z,stairStone);box(.22,y+.09,.565,-11.26,(y+.09)/2,z,stairFront)}
 box(3.4,.22,2,-9.72,3.28,-10.65,stairStone);
 barBetween(-8.13,.25,-2,-8.13,3.85,-9.3,.035,metal);
 barBetween(-11.35,.25,-2,-11.35,3.85,-9.3,.035,metal);
@@ -151,7 +150,7 @@ function barrel(x,z,s=1){
  const profile=[[.51,0],[.57,.12],[.64,.35],[.7,.72],[.66,1.15],[.58,1.55],[.54,1.65]].map(p=>new THREE.Vector2(...p));
  const body=mesh(new THREE.LatheGeometry(profile,32),barrelWood,g);body.castShadow=true;
  for(const y of [.14,.58,1.13,1.51]){const ring=mesh(new THREE.TorusGeometry(.62,.036,7,38),metal,g);ring.rotation.x=Math.PI/2;ring.position.y=y;if(y===.58)ring.scale.set(1.095,1.095,1)}
- for(let i=0;i<15;i++){const a=i/15*Math.PI*2;const radius=.62;let slat=box(.015,1.47,.04,Math.cos(a)*radius,.78,Math.sin(a)*radius,material('#34241d'));slat.rotation.y=-a;}
+ for(let i=0;i<15;i++){const a=i/15*Math.PI*2;const radius=.62;let slat=box(.018,1.48,.035,Math.cos(a)*radius,.78,Math.sin(a)*radius,material('#34241d'),g);slat.rotation.y=-a;}
  const rim=mesh(new THREE.TorusGeometry(.56,.052,8,32),woodDark,g);rim.rotation.x=Math.PI/2;rim.position.y=1.66;
  const inner=mesh(new THREE.CircleGeometry(.52,32),material('#29241e'),g);inner.rotation.x=-Math.PI/2;inner.position.y=1.65;
  return g;

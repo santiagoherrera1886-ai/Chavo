@@ -25,3 +25,17 @@
 @media(max-width:1050px){.bottom-title{max-width:53vw}.scene-shortcuts{gap:6px}.scene-chip{padding:8px;font-size:8px}.bottom-ui{bottom:55px}.bottom-controls{gap:7px}}
 @media(max-width:650px){.bottom-title{max-width:58vw}.bottom-title h2{font-size:26px}.bottom-title p{font-size:10px}.bottom-ui{bottom:24px;gap:8px}.scene-shortcuts{gap:5px;margin-top:11px}.scene-chip{padding:7px 8px;font-size:8px;letter-spacing:.1px}.topbar .top-actions{gap:4px}.topbar .top-actions .icon-button{width:29px;height:29px;font-size:15px}.reference-overlay{padding:10px}.reference-window{padding:17px 14px}.reference-window h2{font-size:25px}.reference-window img{max-height:60vh}.intro-content::after{display:none}}
 @media(max-height:680px){.bottom-ui{bottom:25px}.scene-shortcuts{margin-top:9px}.scene-chip{padding:7px}}
+
+/* Historical architectural map v3: separate courtyards and dogleg passage. */
+.floorplan-title{display:flex;justify-content:space-between;gap:5px;align-items:center;color:#f2ce9b;font-size:9px;font-weight:800;letter-spacing:1.45px;margin-top:5px;margin-bottom:9px}
+.floorplan-title span{font-size:8px;color:#aaae9c;font-weight:500;letter-spacing:1px}
+.drawer .map-area{height:auto;aspect-ratio:1/1;background:#1c3028;overflow:hidden;padding:5px;flex-shrink:0;border:1px solid rgba(213,183,140,.4)}
+.drawer .map-area svg{width:100%;height:100%;display:block}
+.patio-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.patio-actions button{font-size:9px;letter-spacing:.6px;font-weight:800;border:1px solid #cfb384;background:#d8bd97;color:#233a31;padding:10px 5px;cursor:pointer;transition:background .15s}
+.patio-actions button:first-child{color:#eedbbb;background:#253f36;border-color:#a89572}
+.patio-actions button:hover{background:#ecd2a5;color:#26362c}
+.floorplan-note{font-size:10px;color:#bbb6a8;line-height:1.65;margin:10px 0 14px}
+.drawer .drawer-copy{margin:14px 0 12px}
+.drawer .place-heading{margin:12px 0 8px}
+@media(max-width:650px){.drawer .map-area{aspect-ratio:1/1}.patio-actions button{font-size:8px}.floorplan-title{font-size:8px}}

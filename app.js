@@ -9,8 +9,8 @@ scene.background = new THREE.Color('#aab3a5');
 scene.fog = new THREE.FogExp2(0xb8b5a8,0.006);
 const camera = new THREE.PerspectiveCamera(61, innerWidth/innerHeight,.08,300);
 // Start INSIDE the courtyard, past the gate and facing its iconic set.
-camera.position.set(1.35,1.68,5.15);
-let yaw=.11,pitch=-.035,night=false,entered=false,paused=false,ambientOn=false,tourIndex=-1,nearby=null;
+camera.position.set(0,1.68,8.5);
+let yaw=0,pitch=-.055,night=false,entered=false,paused=false,ambientOn=false,tourIndex=-1,nearby=null;
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
 const renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance',preserveDrawingBuffer:true});
@@ -231,16 +231,29 @@ const lanterns=[],lampLights=[];
 function lantern(x,y,z){const m=material('#292b28',.5,.65);box(.3,.43,.26,x,y,z,m);const bulb=box(.18,.29,.12,x,y,z+.15,new THREE.MeshStandardMaterial({color:'#ffc88a',emissive:'#e8a95a',emissiveIntensity:.18,roughness:.45}));const light=new THREE.PointLight(0xffb977,0,12,2);light.position.set(x,y,z+1);scene.add(light);lanterns.push(bulb);lampLights.push(light)}
 lantern(-3.3,3.65,-11.56);lantern(6.6,3.8,-11.52);lantern(-11.48,3.8,7);
 // Exterior second patio: corridor through rear wall
-box(.38,5.2,10.3,3.07,2.6,-17.1,greenStucco);
+// Patio 1 is fully separate: a narrow corridor runs backward between 71/72.
+// At its blind end, the visitor must turn RIGHT; no straight sightline to the fountain.
+box(.38,5.2,11.65,3.07,2.6,-17.74,greenStucco);
 // Openable views between Don Ramón's window and the passage.
 box(.38,5.2,3.05,5.85,2.6,-13.475,ochre);
-box(.38,5.2,5.15,5.85,2.6,-19.675,ochre);
+box(.38,5.2,2.45,5.85,2.6,-18.275,ochre);
 box(.38,1.12,2.1,5.85,.56,-16.05,ochre);
 box(.38,2.05,2.1,5.85,4.175,-16.05,ochre);
 windowAt(5.62,-16.05,2.02,-Math.PI/2,2.1);
 box(3.1,.33,10.6,4.47,5.15,-17.1,roofMat);
 for(let i=0;i<5;i++){const z=-13.2-i*2;box(2.85,.11,.17,4.46,4.5,z,material('#7d6148'))}
-box(18,.12,18,4.45,-.055,-28,material('#aea493'));
+// Physical 90-degree passage: first turn east, then enter the distant second patio.
+// Its south wall makes the fountain invisible from the main courtyard.
+box(12.2,.10,3.65,10.10,-.04,-21.62,floorMat);
+box(10.77,4.7,.36,11.21,2.35,-19.77,beige); // north wall
+box(10.86,4.7,.36,8.65,2.35,-23.46,ochre); // south wall, ends at x=14.1
+box(11.35,.23,3.85,10.85,4.64,-21.59,roofMat); // covered roof
+for(let i=0;i<7;i++)box(.095,.11,3.65,5.85+i*1.73,4.40,-21.62,paintedWood);
+// Dead end directly ahead; moving east past x=5.8 is the route.
+box(2.85,4.65,.35,4.45,2.33,-23.48,greenStucco);
+// Keep the 2nd patio physically offset (not an open extension behind the first).
+const secondaryStart = scene.children.length;
+box(18,.12,18,4.45,-.055,-28,floorMat);
 box(.4,6,19,-4.75,3,-28,ochre);
 box(.4,6,19,13.6,3,-28,greenStucco);
 box(18.6,6,.48,4.4,3,-37.2,beige);
@@ -251,6 +264,23 @@ door(-1.35,-36.84,11,'#58473f');
 door(8.3,-36.84,21,'#58473f');
 windowAt(1.2,-36.8,2.1,0,2.3);
 for(let i=0;i<12;i++){const a=i*Math.PI*2/12;const xx=4.4+6.5*Math.cos(a),zz=-28.5+6.5*Math.sin(a);if(Math.abs(xx-4.4)>1.5)planter(xx,zz,r(.6,.95))}
+// Offset the second patio 12m EAST and 5m NORTH-SOUTH away from the first.
+// It remains a separate 18x18 enclosed courtyard with its own doors.
+const secondaryOffset={x:12,z:-5};
+for(const obj of scene.children.slice(secondaryStart)){
+ obj.position.x+=secondaryOffset.x;
+ obj.position.z+=secondaryOffset.z;
+}
+// Historical second patio: upper galleries seen in later episodes, separated from first.
+const galleryWood=material('#705340'),galleryIron=material('#514c43',.55,.55);
+for(let i=0;i<12;i++){
+ const gx=8.55+i*1.49;
+ box(1.39,.22,1.45,gx,4.20,-40.55,galleryWood);
+ barBetween(gx-.64,4.39,-39.85,gx-.64,5.48,-39.85,.028,galleryIron);
+ barBetween(gx+.64,4.39,-39.85,gx+.64,5.48,-39.85,.028,galleryIron);
+}
+barBetween(7.9,5.49,-39.85,25.0,5.49,-39.85,.036,galleryIron);
+const fountainStart=scene.children.length;
 // Fully explorable apartments 14, 71, 72, with period-specific furniture.
 const interiorWorld=addInteriors({THREE,scene,mesh,box,cyl,material,barBetween});
 const water=new THREE.MeshPhysicalMaterial({color:'#78a49f',roughness:.1,metalness:.12,transparent:true,opacity:.82,clearcoat:.9});
@@ -260,6 +290,14 @@ cyl(.55,.8,1.3,4.4,1.25,-29.1,material('#bdb49d'),26);
 cyl(.73,.5,.2,4.4,2.0,-29.1,material('#c9c3a9'),26);
 const ripple1=mesh(new THREE.TorusGeometry(.55,.015,5,48),new THREE.MeshBasicMaterial({color:'#d1f0e7',transparent:true,opacity:.5}));ripple1.rotation.x=Math.PI/2;ripple1.position.set(4.4,.695,-29.1);
 const ripple2=ripple1.clone();scene.add(ripple2);ripple2.position.set(4.4,.698,-29.1);
+// Fountain meshes are generated after home interiors: move only these fountain objects.
+for(const obj of scene.children.slice(fountainStart)){
+ obj.position.x+=secondaryOffset.x;
+ obj.position.z+=secondaryOffset.z;
+}
+// Distinct visual landmarks in the second patio.
+const otherPatioSign=sign('II',.72,.43);
+otherPatioSign.position.set(16.4,3.12,-41.75);
 // Updated studio-era set: cracked flagstones, real curtain lace, stained plaster,
 // flowering staircase, hanging laundry and detailed period fittings.
 const version2=renovateSet({
@@ -267,8 +305,8 @@ const version2=renovateSet({
  materials:{greenStucco,ochre,beige,redStucco,floorMat,wood:paintedWood,metal}
 });
 // Secondary patio features
-barrel(10.85,-32.5,.86);
-crate(-3.8,-32,.55);
+barrel(22.85,-37.5,.86);
+crate(8.2,-37,.55);
 const sun=new THREE.DirectionalLight(0xffe4bd,2.7);sun.position.set(-19,35,19);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-50;sun.shadow.camera.right=50;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;sun.shadow.bias=-.00025;sun.shadow.normalBias=.018;scene.add(sun,sun.target);sun.target.position.set(0,0,-12);
 const hemi=new THREE.HemisphereLight(0xd8e0de,0x665944,1.3);scene.add(hemi);
 const ambient=new THREE.AmbientLight(0xffffff,.23);scene.add(ambient);
@@ -290,8 +328,8 @@ const places=[
 {id:'72',title:'Departamento 72',sub:'Don Ramón y la Chilindrina',cat:'LOS VECINOS',icon:'72',x:9,z:-11.6,tx:8.6,tz:-7.4,desc:'Puedes entrar caminando: paredes verde menta, mesa de cuadros, dos sillones desgastados sobre bloques, televisor antiguo, cajonera, fotos, banderines, guitarra y una pequeña habitación de la Chilindrina. Reconstrucción inspirada en distintas épocas del programa.'},
 {id:'23',title:'Las escaleras y el 23',sub:'Arriba del patio',cat:'LA ARQUITECTURA',icon:'↗',x:-9.2,z:-7.9,tx:-7.1,tz:-4.7,desc:'Las escaleras de concreto, con barandal de hierro, conducen al departamento 23. El interior de esta vivienda no se mostraba habitualmente en la serie.'},
 {id:'lavadero',title:'El lavadero',sub:'Historias entre cubetas',cat:'VIDA COTIDIANA',icon:'≈',x:-7.4,z:-9.7,tx:-5.0,tz:-7.8,desc:'El lavadero, las cubetas y las plantas recuerdan que la vecindad era un lugar de vida cotidiana, encuentros inesperados y pequeños enredos.'},
-{id:'pasillo',title:'El pasillo secreto',sub:'Camino al otro patio',cat:'MÁS ALLÁ DEL PATIO',icon:'→',x:4.45,z:-16,tx:4.45,tz:-12.6,desc:'Entre los departamentos 71 y 72 se abre el paso al segundo patio. Atrévete a caminar por él: hay otra sorpresa esperándote al final.'},
-{id:'fuente',title:'El segundo patio',sub:'La fuente de la vecindad',cat:'UNA NUEVA PERSPECTIVA',icon:'✦',x:4.4,z:-29,tx:4.4,tz:-23,desc:'Este segundo patio incluye una fuente, evocando un espacio menos visto de la serie. La forma, materiales y proporciones son interpretaciones artísticas, no una reconstrucción exacta.'}
+{id:'pasillo',title:'El corredor de conexión',sub:'Avanza y gira a la derecha',cat:'PATIO 1 → PATIO 2',icon:'→',x:4.45,z:-20.7,tx:4.45,tz:-18.2,desc:'Entre los departamentos 71 y 72 se abre el paso al segundo patio. Atrévete a caminar por él: hay otra sorpresa esperándote al final.'},
+{id:'fuente',title:'El segundo patio',sub:'La fuente de la vecindad',cat:'PATIO 2 · TRAS EL PASILLO',icon:'✦',x:16.4,z:-34,tx:16.4,tz:-27.5,desc:'Este segundo patio incluye una fuente, evocando un espacio menos visto de la serie. La forma, materiales y proporciones son interpretaciones artísticas, no una reconstrucción exacta.'}
 ];
 const visited=new Set(),markers=[];
 for(const p of places){
@@ -358,7 +396,7 @@ function showHelp(){$('helpModal').classList.add('open');paused=true;if(document
 function hideHelp(){$('helpModal').classList.remove('open');paused=false}
 $('helpBtn').onclick=showHelp;$('helpClose').onclick=hideHelp;$('helpDone').onclick=hideHelp;
 function resetCamera(){
- camera.position.set(1.35,1.68,5.15);yaw=.11;pitch=-.035;camera.rotation.set(pitch,yaw,0);
+ camera.position.set(0,1.68,8.5);yaw=0;pitch=-.055;camera.rotation.set(pitch,yaw,0);
  toast('CÁMARA REUBICADA · PATIO DE 1975');
 }
 $('recenterBtn')?.addEventListener('click',resetCamera);
@@ -398,22 +436,27 @@ function whichApartment(x,z){
  return null;
 }
 function allowed(x,z){
- // Courtyard with clearances around the barrel and the concrete stairs.
+ // 1. Main courtyard (the original with the barrel). Doors 14,71,72 share its rear facade.
  if(z>=-11.48&&z<=12.2&&x>=-11.45&&x<=11.45){
-  if(x<-8.05 && z<-2.1 && z>-10.8)return false;
-  if(Math.hypot(x+.45,z+1.4)<1.09)return false;
+  if(x<-8.05 && z<-2.1 && z>-10.8)return false; // staircase footprint
+  if(Math.hypot(x+.45,z+1.4)<1.09)return false; // barrel
   return true;
  }
- // The walls are solid except for the three 1.6 m doorways.
+ // Thresholds: doors 14, 71, 72 and the CORRIDOR opening, between 71 and 72.
  if(z>=-12.57&&z< -11.48){
-  if([[-6.85,.68],[-.8,.68],[9,.68],[4.45,1.13]].some(([cx,half])=>Math.abs(x-cx)<half))return true;
-  return false;
+  return [[-6.85,.68],[-.8,.68],[9,.68],[4.45,1.13]].some(([cx,half])=>Math.abs(x-cx)<half);
  }
+ // Rooms belong to first patio and cannot be reached by cutting through outer walls.
  if(whichApartment(x,z))return true;
- // Side corridor connecting both patios.
- if(x>3.35&&x<5.55&&z<=-11.2&&z>=-20.15)return true;
- if(z<-19.1&&z>-36.5&&x>-4.1&&x<12.9){
-  if(Math.hypot(x-4.4,z+29.1)<2.45)return false;
+ // 2. Narrow first corridor from the courtyard; turn RIGHT at its blind end.
+ if(x>3.35&&x<5.55&&z<=-11.8&&z>=-23.14)return true;
+ // 3. Covered transverse passage: its 90-degree turn blocks the patio-to-patio view.
+ if(x>4.95&&x<16.88&&z<=-20.10&&z>=-23.25)return true;
+ // 4. Entrance into second patio. Aligned with the opening in the courtyard facade.
+ if(x>14.9&&x<17.8&&z<=-23.15&&z>=-24.65)return true;
+ // 5. Distinct second patio, 12 m east and 5 m further back.
+ if(z<-24.3&&z>-41.7&&x>7.6&&x<25.25){
+  if(Math.hypot(x-16.4,z+34.1)<2.55)return false;
   return true;
  }
  return false;
@@ -445,12 +488,18 @@ function update(delta,t){
  for(const p of places){let dx=p.x-camera.position.x,dz=p.z-camera.position.z,dist=Math.hypot(dx,dz);if(dist<closest&&((dx*dir.x+dz*dir.z)/Math.max(dist,.1)>.1||dist<1.65)){nearby=p;closest=dist}}
  $('interaction').classList.toggle('active',!!nearby&&entered&&!paused);if(nearby)$('interactionTitle').textContent=nearby.title;
  const apt=whichApartment(camera.position.x,camera.position.z);
- const other=camera.position.z<-19.0&&!apt;
- $('locationLabel').textContent=apt?'INTERIOR · CASA '+apt:other?'SEGUNDO PATIO':camera.position.z<-11.5?'EL PASILLO':'PATIO PRINCIPAL';
+ const other=camera.position.z<-24.15&&camera.position.x>7.6&&!apt;
+ $('locationLabel').textContent=apt?'INTERIOR · CASA '+apt:other?'SEGUNDO PATIO':camera.position.z<-11.5?'PASILLO ENTRE 71 Y 72':'PATIO PRINCIPAL';
  $('areaTitle').innerHTML=apt?'Dentro de la casa '+apt+'<span>.</span>':other?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
  $('areaText').textContent=apt==='72'?'Don Ramón y la Chilindrina · sala, comedor y dormitorio':apt==='14'?'Doña Florinda y Quico · recreación de época':apt==='71'?'Doña Clotilde · interior de interpretación artística':other?'Más allá del pasillo, otra historia.':'Un lugar pequeño. Un millón de historias.';
- const mapX=150+camera.position.x*8,mapY=other?100+(camera.position.z+12)*3.7:100+(camera.position.z+12)*7.55;
- $('playerMap').setAttribute('cx',Math.max(20,Math.min(280,mapX)));$('playerMap').setAttribute('cy',Math.max(15,Math.min(312,mapY)));
+ // Architectural map: first patio lower-left, dogleg hallway, separate patio upper-right.
+ let mapX,mapY;
+ if(other){mapX=242+(camera.position.x-7.25)*7.65;mapY=165+(camera.position.z+23.5)*7.2;}
+ else if(camera.position.z<-19.7&&camera.position.x>5.65&&!apt){mapX=142+(camera.position.x-5.65)*8.8;mapY=139+(camera.position.z+21.6)*7.8;}
+ else if(camera.position.z<-11.5&&!apt){mapX=128+(camera.position.x-4.45)*6.8;mapY=205+(camera.position.z+11.5)*7.2;}
+ else{mapX=22+(camera.position.x+11.45)*6.8;mapY=205+(camera.position.z+11.5)*7.2;}
+ $('playerMap').setAttribute('cx',Math.max(12,Math.min(387,mapX)));
+ $('playerMap').setAttribute('cy',Math.max(16,Math.min(383,mapY)));
  }
  markers.forEach(({ring,glow},i)=>{const h=Math.sin(t*2+i*.7);ring.scale.setScalar(1+h*.18);glow.material.opacity=.64+h*.18});
  hanging.forEach((obj,i)=>obj.rotation.y=Math.sin(t*1.3+i)*.07);

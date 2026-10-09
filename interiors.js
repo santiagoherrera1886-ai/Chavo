@@ -48,7 +48,13 @@ export function addInteriors({THREE,scene,mesh,box,cyl,material,barBetween}){
   const w=material(walls);
   piece(x2-x1,.12,z2-z1,(x1+x2)/2,.04,(z1+z2)/2,tileMat);
   piece(x2-x1,top,.18,(x1+x2)/2,top/2,z1,w);
-  piece(.22,top,z2-z1,x1,top/2,(z1+z2)/2,w);
+  // Don Ramón's corridor-side window has a genuinely open wall aperture.
+  if(x1>5){
+    piece(.22,top,1.96,x1,top/2,-18.07,w);
+    piece(.22,top,2.80,x1,top/2,-13.60,w);
+    piece(.22,1.12,2.15,x1,.56,-16.05,w);
+    piece(.22,1.15,2.15,x1,3.665,-16.05,w);
+  }else piece(.22,top,z2-z1,x1,top/2,(z1+z2)/2,w);
   piece(.22,top,z2-z1,x2,top/2,(z1+z2)/2,w);
   ceiling((x1+x2)/2,(z1+z2)/2,x2-x1,z2-z1,top);
   // Baseboards along back and sides
@@ -170,8 +176,10 @@ export function addInteriors({THREE,scene,mesh,box,cyl,material,barBetween}){
   light(9.1,3.82,-15.6,2.9);
   // worn sofa with cinderblock supports, small separate bench
   couch(7.55,-17.15,sofaFabric,2.5);
-  piece(1.18,.28,.67,7.3,.37,-15.92,sofaFabric);
-  for(let xx of [6.85,7.8])piece(.20,.19,.26,xx,.1,-15.92,material('#9b968b'));
+  // Second smaller damaged sofa: source confirms two repaired armchairs / sofas.
+  couch(7.22,-14.67,sofaFabric,1.22);
+  // Floral curtains and working aperture overlook the passage to the second patio.
+  curtainWindow(5.98,2.08,-16.05,2.04,Math.PI/2);
   guitar(7.2,-16.08,-.14);
   diningTable(10,-14.8,greenCheck,1.73,1.23);
   chair(9.2,-14.55,-.08);chair(10.83,-14.56,.3);chair(10.05,-13.65,.3);
@@ -199,6 +207,10 @@ export function addInteriors({THREE,scene,mesh,box,cyl,material,barBetween}){
   piece(1.2,.18,.92,9.9,.76,-18.34,material('#ecd6ba'));
   piece(.18,.8,1.03,9.24,.74,-18.34,brown);
   piece(.33,.13,.35,9.55,.85,-18.13,cream);
+  // Ropero in Chilindrina's room, antique wooden wardrobe with two panels.
+  piece(.85,1.95,.37,11.45,1.02,-18.62,pine);
+  piece(.035,1.75,.05,11.2,1.03,-18.40,brown);
+  piece(.035,1.75,.05,11.66,1.03,-18.40,brown);
   light(10.8,2.72,-18.43,1.1);
  }
  function room14(){
@@ -223,6 +235,9 @@ export function addInteriors({THREE,scene,mesh,box,cyl,material,barBetween}){
   light(-.35,3.66,-15.4,1.6);
   curtainWindow(-2,2.36,-18.7,1.48);
   couch(-1.6,-17.0,material('#816c75'),2.36);
+  // Antique, ornamented furnishings as documented for Doña Clotilde.
+  for(const x of [-2.5,-.65]){piece(.17,.33,.31,x,.82,-16.95,material('#806349'));piece(.12,.13,.27,x,.99,-16.95,material('#bfaa7b'));}
+  const oldLamp=mesh(new THREE.ConeGeometry(.38,.42,10),material('#d1b18c'));oldLamp.position.set(1.86,1.65,-17.2);
   diningTable(.92,-14.6,floralFabric,1.25,1.04);
   chair(1.5,-14.1,Math.PI);chair(-.05,-14.4,0);
   dresser(1.86,-17.2,-Math.PI/2,3,1.15);

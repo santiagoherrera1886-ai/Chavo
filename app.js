@@ -223,7 +223,12 @@ function lantern(x,y,z){const m=material('#292b28',.5,.65);box(.3,.43,.26,x,y,z,
 lantern(-3.3,3.65,-11.56);lantern(6.6,3.8,-11.52);lantern(-11.48,3.8,7);
 // Exterior second patio: corridor through rear wall
 box(.38,5.2,10.3,3.07,2.6,-17.1,greenStucco);
-box(.38,5.2,10.3,5.85,2.6,-17.1,ochre);
+// Openable views between Don Ramón's window and the passage.
+box(.38,5.2,3.05,5.85,2.6,-13.475,ochre);
+box(.38,5.2,5.15,5.85,2.6,-19.675,ochre);
+box(.38,1.12,2.1,5.85,.56,-16.05,ochre);
+box(.38,2.05,2.1,5.85,4.175,-16.05,ochre);
+windowAt(5.62,-16.05,2.02,-Math.PI/2,2.1);
 box(3.1,.33,10.6,4.47,5.15,-17.1,roofMat);
 for(let i=0;i<5;i++){const z=-13.2-i*2;box(2.85,.11,.17,4.46,4.5,z,material('#7d6148'))}
 box(18,.12,18,4.45,-.055,-28,material('#aea493'));
@@ -267,7 +272,7 @@ const places=[
 {id:'barril',title:'El barril del Chavo',sub:'Donde nacen las historias',cat:'EL RINCÓN MÁS QUERIDO',icon:'◉',x:-.45,z:-1.4,tx:0,tz:2.3,desc:'Mucho más que un barril: el refugio más famoso del patio. Una réplica artística de ese rincón donde el Chavo se escondía, pensaba y encontraba un poquito de tranquilidad.'},
 {id:'14',title:'Departamento 14',sub:'Doña Florinda y Quico',cat:'LOS VECINOS',icon:'14',x:-6.85,z:-11.6,tx:-6.6,tz:-7.6,desc:'Aquí viven Doña Florinda y Quico. La puerta número 14, entre visitas del Profesor Jirafales y tardes de patio, forma parte inseparable de los recuerdos de la serie.'},
 {id:'71',title:'Departamento 71',sub:'Doña Clotilde',cat:'LOS VECINOS',icon:'71',x:-.8,z:-11.6,tx:-.8,tz:-7.5,desc:'El hogar de Doña Clotilde, a quien los niños llamaban la Bruja del 71. Su puerta es uno de los lugares más reconocibles de la vecindad.'},
-{id:'72',title:'Departamento 72',sub:'Don Ramón y la Chilindrina',cat:'LOS VECINOS',icon:'72',x:9,z:-11.6,tx:8.6,tz:-7.4,desc:'En este departamento viven Don Ramón y la Chilindrina. De aquí salían algunas de las escenas más memorables y divertidas de la vecindad.'},
+{id:'72',title:'Departamento 72',sub:'Don Ramón y la Chilindrina',cat:'LOS VECINOS',icon:'72',x:9,z:-11.6,tx:8.6,tz:-7.4,desc:'Puedes entrar caminando: paredes verde menta, mesa de cuadros, dos sillones desgastados sobre bloques, televisor antiguo, cajonera, fotos, banderines, guitarra y una pequeña habitación de la Chilindrina. Reconstrucción inspirada en distintas épocas del programa.'},
 {id:'23',title:'Las escaleras y el 23',sub:'Arriba del patio',cat:'LA ARQUITECTURA',icon:'↗',x:-9.2,z:-7.9,tx:-7.1,tz:-4.7,desc:'Las escaleras de concreto, con barandal de hierro, conducen al departamento 23. El interior de esta vivienda no se mostraba habitualmente en la serie.'},
 {id:'lavadero',title:'El lavadero',sub:'Historias entre cubetas',cat:'VIDA COTIDIANA',icon:'≈',x:-7.4,z:-9.7,tx:-5.0,tz:-7.8,desc:'El lavadero, las cubetas y las plantas recuerdan que la vecindad era un lugar de vida cotidiana, encuentros inesperados y pequeños enredos.'},
 {id:'pasillo',title:'El pasillo secreto',sub:'Camino al otro patio',cat:'MÁS ALLÁ DEL PATIO',icon:'→',x:4.45,z:-16,tx:4.45,tz:-12.6,desc:'Entre los departamentos 71 y 72 se abre el paso al segundo patio. Atrévete a caminar por él: hay otra sorpresa esperándote al final.'},
@@ -283,7 +288,10 @@ for(let i=0;i<places.length;i++){const p=places[i];const b=document.createElemen
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toast.timeout);toast.timeout=setTimeout(()=>$('toast').classList.remove('show'),2600)}
 function markVisited(p){visited.add(p.id);$('visitedCount').textContent=visited.size+' / 8';const b=document.querySelector('.place[data-id="'+p.id+'"]');if(b)b.classList.add('visited')}
 function teleport(p){
- camera.position.set(p.tx,1.7,p.tz);yaw=Math.atan2(-(p.x-p.tx),-(p.z-p.tz));pitch=-.03;
+ const interiorTarget=['14','71','72'].includes(p.id);
+ const destX=interiorTarget?p.x:p.tx,destZ=interiorTarget?-13.55:p.tz;
+ camera.position.set(destX,1.7,destZ);
+ yaw=interiorTarget?0:Math.atan2(-(p.x-p.tx),-(p.z-p.tz));pitch=-.03;
  camera.rotation.set(pitch,yaw,0);$('areaTitle').innerHTML=p.id==='fuente'?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
  $('areaText').textContent=p.sub;markVisited(p);toast('DESTINO: '+p.title.toUpperCase());
 }

@@ -251,6 +251,9 @@ box(11.35,.23,3.85,10.85,4.64,-21.59,roofMat); // covered roof
 for(let i=0;i<7;i++)box(.095,.11,3.65,5.85+i*1.73,4.40,-21.62,paintedWood);
 // Dead end directly ahead; moving east past x=5.8 is the route.
 box(2.85,4.65,.35,4.45,2.33,-23.48,greenStucco);
+const turnMarker=sign('→',1.18,.56);
+turnMarker.position.set(4.45,2.3,-23.27);
+lantern(4.15,3.35,-23.19);
 // Keep the 2nd patio physically offset (not an open extension behind the first).
 const secondaryStart = scene.children.length;
 box(18,.12,18,4.45,-.055,-28,floorMat);

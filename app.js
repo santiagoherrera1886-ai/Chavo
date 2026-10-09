@@ -280,9 +280,10 @@ for(let i=0;i<12;i++){
  barBetween(gx+.64,4.39,-39.85,gx+.64,5.48,-39.85,.028,galleryIron);
 }
 barBetween(7.9,5.49,-39.85,25.0,5.49,-39.85,.036,galleryIron);
-const fountainStart=scene.children.length;
 // Fully explorable apartments 14, 71, 72, with period-specific furniture.
+// They remain in the MAIN patio! Only the fountain itself is displaced.
 const interiorWorld=addInteriors({THREE,scene,mesh,box,cyl,material,barBetween});
+const fountainStart=scene.children.length;
 const water=new THREE.MeshPhysicalMaterial({color:'#78a49f',roughness:.1,metalness:.12,transparent:true,opacity:.82,clearcoat:.9});
 cyl(2.3,2.4,.6,4.4,.28,-29.1,material('#b6ae96'),40);
 cyl(1.92,1.92,.08,4.4,.63,-29.1,water,40);

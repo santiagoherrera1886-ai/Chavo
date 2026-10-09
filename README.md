@@ -1,9 +1,33 @@
 # La Vecindad · Experiencia 3D
 Una visita en primera persona a una **recreación artística, no oficial** de la vecindad de *El Chavo del 8*, hecha con **Three.js** y JavaScript moderno.
 
+## Plano y recorrido corregido (octubre 2026)
+
+La app **ya no ubica los patios uno detrás del otro como una plaza continua**. Ahora la visita recorre:
+
+1. **Patio 1 — Patio clásico (1975)**: barril, escaleras al apartamento 23, lavadero, plantas, puerta 14 de Doña Florinda, puerta 71 de Doña Clotilde, puerta 72 de Don Ramón y portón.
+2. **Pasillo cubierto entre 71 y 72**: entrar al corredor, caminar hacia el fondo hasta la pared y girar **a la derecha**. El giro evita la visión directa del segundo patio desde la puerta de entrada.
+3. **Patio 2 — Fuente**: patio físicamente independiente, desplazado hacia un costado, con otros departamentos y galería alta inspirados en el decorado televisivo.
+4. **Casas visitables**: se conserva el acceso en primera persona a 14, 71 y 72; se pueden seleccionar en el mapa.
+5. **Tercer patio**: la serie lo menciona, pero las referencias no proporcionan un plano completo y consistente. No se presenta como reconstrucción exacta ni como estancia explorada.
+
+**Importante:** el giro y las proporciones del pasillo son un recurso de diseño interpretativo para materializar la separación entre patios. No son un plano técnico original de Televisa. El conjunto evolucionó con las temporadas, y los interiores también variaron.
+
+### Cómo comprobarlo
+- Desde el patio principal, busca el corredor **entre los números 71 y 72**.
+- Camina hacia el fondo y gira a la derecha; solo entonces se revela el **patio 2 con la fuente**.
+- Pulsa **M** para ver el nuevo plano esquemático y usar los botones de navegación al Patio 1 o Patio 2.
+- Pulsa **R** para recentrar la vista al patio original.
+- Entra en las viviendas 14, 71 y 72 atravesando sus puertas.
+
+### Referencias usadas
+- [Blog de Chespirito — La Vecindad (segunda parte)](https://blog.chespirito.com/la_vecindad_segunda-parte/)
+- [El Chavo Wiki — Primer patio](https://elchavo.fandom.com/es/wiki/Primer_patio)
+- [El Chavo Wiki — Segundo patio](https://elchavo.fandom.com/es/wiki/Segundo_patio)
+
 ## ¿Qué hay?
 - Patio principal con puertas **14, 71, 72 y 23**, escalera, plantas, lavadero y barril.
-- Pasillo transitable que conduce al **segundo patio con fuente**.
+- Pasillo cubierto con giro a la derecha que conecta con el **segundo patio independiente con fuente**.
 - Escenario 3D en tiempo real: geometrías modeladas, materiales con texturas procedurales, sombras, día y noche.
 - Movimiento con **WASD / flechas**, mouse para mirar, **Shift** para acelerar, **E** para explorar, **M** para el mapa y **Esc** para salir de la captura del mouse.
 - En móviles: control táctil tipo joystick y vista deslizable.

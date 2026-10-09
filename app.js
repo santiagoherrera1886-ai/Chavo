@@ -96,9 +96,6 @@ const ground=mesh(new THREE.PlaneGeometry(90,110),floorMat);ground.rotation.x=-M
 const patio=box(26,.08,26,0,-.065,0,material('#a89c87'));patio.receiveShadow=true; // texture floor remains visible on top
 for(let i=0;i<18;i++){const x=r(-11,11),z=r(-10,11);const stain=mesh(new THREE.CircleGeometry(r(.17,.6),12),new THREE.MeshBasicMaterial({color:'#777563',transparent:true,opacity:r(.03,.085),depthWrite:false}));stain.rotation.x=-Math.PI/2;stain.position.set(x,.014,z)}
 // First patio architecture: left wall, right wall, front with open entrance
-stuccoWall(-12.1,0,.48,7.1,greenStucco,26.5).rotation.y=0; // long side aligned z below with correction
-// rebuild as elongated box along z
-scene.remove(scene.children[scene.children.length-1]); 
 box(.48,7.2,27,-12.15,3.6,.2,greenStucco);
 box(.48,7.2,27,12.15,3.6,.2,ochre);
 box(8.95,7.2,.5,-7.6,3.6,13.35,beige);
@@ -128,7 +125,7 @@ door(-.8,-11.76,71,'#584c47');
 door(9.0,-11.76,72,'#51483e');
 windowAt(-4.35,-11.75,1.55,0,2.1);
 windowAt(11.0,-11.75,1.22,0,2.3);
-windowAt(-1.2,7.2,1.6,Math.PI,3.95);
+windowAt(-7.6,13.02,1.6,Math.PI,3.95);
 // stairway to #23 at left
 const stairStone=material('#777574'),stairFront=material('#956955');
 for(let i=0;i<13;i++){let y=(i+1)*.245;let z=-1.9-i*.56;box(2.84,y,.565,-9.72,y/2,z,stairStone);box(.22,y+.09,.565,-11.26,(y+.09)/2,z,stairFront)}

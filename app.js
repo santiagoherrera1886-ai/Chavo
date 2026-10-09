@@ -354,6 +354,15 @@ function openMap(){if(!entered)return;paused=true;if(document.pointerLockElement
 function closeMap(){$('mapDrawer').classList.remove('open');$('drawerBackdrop').classList.remove('open');$('mapDrawer').setAttribute('aria-hidden','true');paused=false}
 $('mapBtn').addEventListener('click',()=>{if($('mapDrawer').classList.contains('open'))closeMap();else openMap()});
 $('closeMap').onclick=closeMap;$('drawerBackdrop').onclick=closeMap;
+$('goPatioOne')?.addEventListener('click',()=>{
+ camera.position.set(0,1.7,6.9);yaw=0;pitch=-.045;
+ closeMap();toast('PATIO 1 · BARRIL, ESCALERA Y VIVIENDAS');
+});
+$('goPatioTwo')?.addEventListener('click',()=>{
+ camera.position.set(16.4,1.7,-27.5);yaw=0;pitch=-.035;
+ closeMap();markVisited(places.find(p=>p.id==='fuente'));
+ toast('PATIO 2 · PATIO INDEPENDIENTE CON FUENTE');
+});
 $('closeModal').onclick=closeInfo;
 // Clear shortcuts: the most-requested residence is one click away.
 $('roomBtn')?.addEventListener('click',()=>{

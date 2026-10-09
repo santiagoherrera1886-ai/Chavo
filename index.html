@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#161b19">
   <meta name="description" content="Recorre una recreación 3D inmersiva de la vecindad más querida de la televisión.">
-  <title>La Vecindad — Experiencia 3D inmersiva</title>
+  <title>La Vecindad 1975 — Nueva reconstrucción interactiva</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=20261009-v2">
+  <link rel="stylesheet" href="./refresh.css?v=20261009-v2">
 </head>
 <body>
   <div id="scene" aria-label="Escenario tridimensional de la vecindad"></div>
@@ -18,11 +19,12 @@
 
   <header class="topbar" id="topbar">
     <div class="branding"><div class="brand-mark">V<span>.</span></div><div><strong>LA VECINDAD</strong><small>UNA EXPERIENCIA PARA RECORDAR</small></div></div>
-    <div class="top-center"><span class="live-dot"></span><span id="locationLabel">PATIO PRINCIPAL</span><span class="top-sep">/</span><span>CIUDAD DE MÉXICO · 1975</span></div>
+    <div class="top-center"><span class="live-dot"></span><span id="locationLabel">PATIO PRINCIPAL</span><span class="top-sep">/</span><span>RECONSTRUCCIÓN DE ÉPOCA · 1975</span></div>
     <div class="top-actions">
       <button class="icon-button" id="timeBtn" title="Cambiar entre día y noche" aria-label="Cambiar iluminación">☾</button>
       <button class="icon-button" id="soundBtn" title="Activar sonido ambiental" aria-label="Sonido ambiental">♫</button>
       <button class="icon-button" id="mapBtn" title="Mapa de la vecindad" aria-label="Abrir mapa">▦</button>
+      <button class="icon-button" id="recenterBtn" title="Volver a mirar el patio (R)" aria-label="Recentrar cámara">⌖</button>
       <button class="icon-button" id="helpBtn" title="Ayuda" aria-label="Ver controles">?</button>
     </div>
   </header>
@@ -32,14 +34,14 @@
     <div class="crosshair" id="crosshair"><i></i><i></i></div>
     <div id="interaction" class="interaction"><span class="key">E</span><div><small>DESCUBRIR</small><strong id="interactionTitle">El barril</strong></div></div>
     <div class="bottom-ui">
-      <div class="bottom-title"><span class="eyebrow">ESTÁS EXPLORANDO</span><h2 id="areaTitle">El patio de siempre<span>.</span></h2><p id="areaText">Un lugar pequeño. Un millón de historias.</p></div>
+      <div class="bottom-title"><span class="eyebrow">ESTÁS EXPLORANDO</span><h2 id="areaTitle">El patio de siempre<span>.</span></h2><p id="areaText">Un lugar pequeño. Un millón de historias.</p><div class="scene-shortcuts"><button id="roomBtn" class="scene-chip">↗ ENTRAR A CASA 72</button><button id="referenceBtn" class="scene-chip secondary-chip">◫ FOTO DE REFERENCIA</button></div></div>
       <div class="bottom-controls"><div class="movement-hint"><div class="keys"><span>W</span><div><span>A</span><span>S</span><span>D</span></div></div><div>PARA CAMINAR<br><em>MOUSE PARA MIRAR</em></div></div><button id="tourBtn" class="pill-button"><span>▶</span> VISITA GUIADA</button><button id="photoBtn" class="secondary-button" title="Guardar captura de pantalla">⌁ <span>FOTO</span></button></div>
     </div>
     <div class="footnote">RECREACIÓN ARTÍSTICA NO OFICIAL · NO ES UN PLANO EXACTO DEL SET</div>
   </main>
 
   <div id="intro" class="intro">
-    <div class="intro-shade"></div>
+    <div class="intro-reference-shot"></div><div class="intro-shade"></div>
     <div class="intro-content">
       <div class="intro-top"><span class="line"></span><span>UNA EXPERIENCIA INMERSIVA EN 3D</span></div>
       <span class="chapter">01 / EL LUGAR DONDE TODO COMENZÓ</span>
@@ -74,9 +76,9 @@
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
   <div class="modal-backdrop" id="modalBackdrop"><article class="story-card"><button id="closeModal" aria-label="Cerrar">×</button><div class="story-index" id="storyIndex">01 / 08</div><div class="story-illustration" id="storyIcon">◉</div><span class="eyebrow" id="storyCategory">LUGAR EMBLEMÁTICO</span><h2 id="storyTitle">El barril del Chavo</h2><p id="storyDesc"></p><div class="story-bottom"><span>RECUERDOS DE LA VECINDAD</span><button id="nextPlace">SIGUIENTE LUGAR ↗</button></div></article></div>
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast"></div><div class="reference-overlay" id="referenceOverlay" aria-hidden="true"><div class="reference-window"><button id="closeReference" aria-label="Cerrar imagen de referencia">×</button><div class="reference-eyebrow">FOTOGRAFÍA HISTÓRICA · NO ES UNA CAPTURA DEL 3D</div><h2>Así se veía el patio<span>.</span></h2><img id="referenceImage" loading="lazy" alt="Fotografía de referencia de la vecindad original: barril, escaleras, puertas y triciclo" src="https://s.yimg.com/lo/mysterio/api/00a0b83331d105e181d612ffefec994b5b484b3e601ea7785947d57f3fa8a690/lightyear_networkapi/resizefill_w976%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fes%2Flanacion.com.ar%2F2600abc32846a6dac3a32a8607b9f946"><p>Esta fotografía sirve para comparar materiales y distribución. El entorno navegable sigue siendo una recreación artesanal que estamos refinando.</p><a href="https://es-us.noticias.yahoo.com/misterio-resuelto-rinc%C3%B3n-vecindad-chavo-185752886.html" target="_blank" rel="noopener">Ver fotografía y contexto ↗</a></div></div>
   <div id="mobileHud"><div id="joystick"><div id="joystickKnob"></div></div><button id="mobileInteract">EXPLORAR</button><span>DESLIZA PARA MIRAR</span></div>
   <div id="helpModal" class="help-modal"><div class="help-content"><button id="helpClose" class="icon-button">×</button><span class="eyebrow">CÓMO EXPLORAR</span><h2>Tu visita empieza aquí.</h2><p><b>W A S D / Flechas</b> — Caminar por el patio.<br><b>Mouse</b> — Mirar alrededor (haz clic para capturar el cursor).<br><b>Shift</b> — Caminar más rápido.<br><b>E</b> — Explorar un lugar cercano.<br><b>Esc</b> — Liberar el cursor.<br><b>M</b> — Abrir el mapa.<br><b>En celular</b> — Joystick para caminar; desliza a la derecha para mirar.</p><button id="helpDone" class="pill-button">ENTENDIDO ↗</button></div></div>
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=20261009-v2"></script>
 </body>
 </html>

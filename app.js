@@ -316,7 +316,28 @@ function openMap(){if(!entered)return;paused=true;if(document.pointerLockElement
 function closeMap(){$('mapDrawer').classList.remove('open');$('drawerBackdrop').classList.remove('open');$('mapDrawer').setAttribute('aria-hidden','true');paused=false}
 $('mapBtn').addEventListener('click',()=>{if($('mapDrawer').classList.contains('open'))closeMap();else openMap()});
 $('closeMap').onclick=closeMap;$('drawerBackdrop').onclick=closeMap;
-$('closeModal').onclick=closeInfo;$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeInfo()});
+$('closeModal').onclick=closeInfo;
+// Clear shortcuts: the most-requested residence is one click away.
+$('roomBtn')?.addEventListener('click',()=>{
+ const p=places.find(place=>place.id==='72');
+ if(!entered){$('intro').classList.add('leave');entered=true;if(mobile)$('mobileHud').classList.add('active');}
+ teleport(p);
+ toast('CASA 72 · YA PUEDES CAMINAR POR EL INTERIOR');
+});
+// Side-by-side historical reference (a PHOTO, not a fake render).
+function showReference(){
+ paused=true;if(document.pointerLockElement)document.exitPointerLock();
+ $('referenceOverlay').classList.add('open');$('referenceOverlay').setAttribute('aria-hidden','false');
+}
+function hideReference(){
+ $('referenceOverlay').classList.remove('open');$('referenceOverlay').setAttribute('aria-hidden','true');
+ paused=false;
+}
+$('referenceBtn')?.addEventListener('click',showReference);
+$('closeReference')?.addEventListener('click',hideReference);
+$('referenceOverlay')?.addEventListener('click',e=>{if(e.target===$('referenceOverlay'))hideReference()});
+$('referenceImage')?.addEventListener('error',e=>{if(e.target.dataset.fallback)return;e.target.dataset.fallback='true';e.target.src='https://cloudfront-us-east-1.images.arcpublishing.com/metroworldnews/H622FSJ7NFFN5J4EAFV4VEEQLI.jpg'});
+$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeInfo()});
 $('nextPlace').onclick=()=>{let n=(places.indexOf(places.find(p=>p.title===$('storyTitle').textContent))+1)%places.length;closeInfo();teleport(places[n]);openInfo(places[n])};
 $('timeBtn').onclick=()=>{
  night=!night;$('timeBtn').textContent=night?'☀':'☾';$('timeBtn').classList.toggle('selected',night);
@@ -350,8 +371,9 @@ document.addEventListener('keydown',e=>{
  if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
  keys.add(e.code);if(e.repeat)return;
  if(e.code==='KeyE'&&entered&&!paused&&nearby)openInfo(nearby);
+ if(e.code==='KeyR'&&entered){resetCamera()}
  if(e.code==='KeyM'&&entered){if($('mapDrawer').classList.contains('open'))closeMap();else openMap()}
- if(e.code==='Escape'){closeInfo();closeMap();hideHelp()}
+ if(e.code==='Escape'){closeInfo();closeMap();hideHelp();hideReference()}
 });
 document.addEventListener('keyup',e=>keys.delete(e.code));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)keys.clear()});

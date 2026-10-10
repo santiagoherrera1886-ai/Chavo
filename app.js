@@ -372,6 +372,11 @@ $('goPatioTwo')?.addEventListener('click',()=>{
  closeMap();markVisited(places.find(p=>p.id==='fuente'));
  toast('PATIO 2 · PATIO INDEPENDIENTE CON FUENTE');
 });
+$('goPatioThree')?.addEventListener('click',()=>{
+ camera.position.set(16.4,1.7,-53);yaw=0;pitch=-.04;
+ closeMap();markVisited(places.find(p=>p.id==='tercero'));
+ toast('PATIO 3 · CASAS 15 · 16 · 8 · 87');
+});
 $('closeModal').onclick=closeInfo;
 // Clear shortcuts: the most-requested residence is one click away.
 $('roomBtn')?.addEventListener('click',()=>{

@@ -452,10 +452,11 @@ renderer.domElement.addEventListener('pointerup',e=>{if(touchLook?.id===e.pointe
 $('mobileInteract').onclick=()=>{if(nearby)openInfo(nearby);else toast('ACÉRCATE A UNA PUERTA O A UN OBJETO BRILLANTE')};
 const headSpace=1.7;
 function whichApartment(x,z){
+ // Side-facing Don Ramón apartment is checked before rear-wall room boundaries.
+ if(x>12.14&&x<19.3&&z>-4.7&&z<1.65)return '72';
  if(z > -11.50||z < -19.01)return null;
  if(x>-10.83&&x<-3.79)return '14';
  if(x>-3.30&&x<2.42)return '71';
- if(x>12.14&&x<19.3&&z>-4.7&&z<1.65)return '72';
  return null;
 }
 function allowed(x,z){

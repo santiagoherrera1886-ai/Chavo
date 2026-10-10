@@ -247,7 +247,22 @@ export function addInteriors({THREE,scene,mesh,box,cyl,material,barBetween}){
   let bloom=mesh(new THREE.SphereGeometry(.16,10,8),material('#a47688'));bloom.position.set(.75,1.42,-14.5);
   smallRug(-.55,-15,1.65,1.25,'#afa397');
  }
- room14();room71();room72();
+ room14();room71();
+ // Reorient the entire Don Ramón house from a rear-wall unit to a side-wall
+ // residence. Anchor old frontage at (9,-12.1) -> right wall (11.95,-1.5).
+ // No mesh is duplicated: move all world-space objects as one group.
+ const roomStart=scene.children.length;
+ room72();
+ const roomAnchor=new THREE.Group();
+ roomAnchor.position.set(12.0,0,-1.5);
+ roomAnchor.rotation.y=-Math.PI/2;
+ scene.add(roomAnchor);
+ const oldDoorAnchor=new THREE.Vector3(9,0,-12.1);
+ const roomObjects=scene.children.slice(roomStart).filter(obj=>obj!==roomAnchor);
+ for(const obj of roomObjects){
+   roomAnchor.add(obj);
+   obj.position.sub(oldDoorAnchor);
+ }
  // Patio details remembered from reference — tricycle, birdcage, brooms and hanging linen
  const wheel=material('#2a2928',.85),hub=material('#bbb4a9',.4,.45),red=material('#c73733',.56,.24);
  const trike=new THREE.Group();trike.position.set(7.72,0,-1.15);trike.rotation.y=-.47;scene.add(trike);

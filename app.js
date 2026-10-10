@@ -1,6 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 import { addInteriors } from './interiors.js';
 import { renovateSet } from './realism.js';
+import { createThirdPatio } from './thirdPatio.js';
 
 const $ = id => document.getElementById(id);
 const mobile = matchMedia('(pointer:coarse)').matches;
@@ -261,7 +262,7 @@ const secondaryStart = scene.children.length;
 box(18,.12,18,4.45,-.055,-28,floorMat);
 box(.4,6,19,-4.75,3,-28,ochre);
 box(.4,6,19,13.6,3,-28,greenStucco);
-box(18.6,6,.48,4.4,3,-37.2,beige);
+box(7.95,6,.48,-.92,3,-37.2,beige);box(7.95,6,.48,9.72,3,-37.2,beige);box(2.9,2.5,.48,4.4,4.75,-37.2,beige);
 box(7.7,6,.44,-1.05,3,-19.1,greenStucco);
 box(7.5,6,.44,9.88,3,-19.1,greenStucco);
 box(18.3,.32,.92,4.4,6.1,-37.2,roofMat);
@@ -313,6 +314,7 @@ const version2=renovateSet({
 // Secondary patio features
 barrel(22.85,-37.5,.86);
 crate(8.2,-37,.55);
+const thirdPatio=createThirdPatio({THREE,scene,box,mesh,barBetween,door,windowAt,material,sign});
 const sun=new THREE.DirectionalLight(0xffe4bd,2.7);sun.position.set(-19,35,19);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-50;sun.shadow.camera.right=50;sun.shadow.camera.top=50;sun.shadow.camera.bottom=-50;sun.shadow.bias=-.00025;sun.shadow.normalBias=.018;scene.add(sun,sun.target);sun.target.position.set(0,0,-12);
 const hemi=new THREE.HemisphereLight(0xd8e0de,0x665944,1.3);scene.add(hemi);
 const ambient=new THREE.AmbientLight(0xffffff,.23);scene.add(ambient);
@@ -335,7 +337,8 @@ const places=[
 {id:'23',title:'Las escaleras y el 23',sub:'Arriba del patio',cat:'LA ARQUITECTURA',icon:'↗',x:-9.2,z:-7.9,tx:-7.1,tz:-4.7,desc:'Las escaleras de concreto, con barandal de hierro, conducen al departamento 23. El interior de esta vivienda no se mostraba habitualmente en la serie.'},
 {id:'lavadero',title:'El lavadero',sub:'Historias entre cubetas',cat:'VIDA COTIDIANA',icon:'≈',x:-7.4,z:-9.7,tx:-5.0,tz:-7.8,desc:'El lavadero, las cubetas y las plantas recuerdan que la vecindad era un lugar de vida cotidiana, encuentros inesperados y pequeños enredos.'},
 {id:'pasillo',title:'El corredor de conexión',sub:'Avanza y gira a la derecha',cat:'PATIO 1 → PATIO 2',icon:'→',x:4.45,z:-20.7,tx:4.45,tz:-18.2,desc:'Entre los departamentos 71 y 72 se abre el paso al segundo patio. Atrévete a caminar por él: hay otra sorpresa esperándote al final.'},
-{id:'fuente',title:'El segundo patio',sub:'La fuente de la vecindad',cat:'PATIO 2 · TRAS EL PASILLO',icon:'✦',x:16.4,z:-34,tx:16.4,tz:-27.5,desc:'Este segundo patio incluye una fuente, evocando un espacio menos visto de la serie. La forma, materiales y proporciones son interpretaciones artísticas, no una reconstrucción exacta.'}
+{id:'fuente',title:'El segundo patio',sub:'La fuente de la vecindad',cat:'PATIO 2 · TRAS EL PASILLO',icon:'✦',x:16.4,z:-34,tx:16.4,tz:-27.5,desc:'Este segundo patio incluye una fuente, evocando un espacio menos visto de la serie. La forma, materiales y proporciones son interpretaciones artísticas, no una reconstrucción exacta.'},
+{id:'tercero',title:'Patio 3 · Otro rincón',sub:'Viviendas 15, 16, 8 y 87',cat:'PATIO 3 · INDEPENDIENTE',icon:'Ⅲ',x:16.4,z:-57.5,tx:16.4,tz:-53,desc:'Tercer patio independiente conectado al segundo mediante un pasaje. Geometría inspirada en el plano aportado por el usuario, no una medición oficial del estudio.'}
 ];
 const visited=new Set(),markers=[];
 for(const p of places){
@@ -345,13 +348,13 @@ for(const p of places){
 const placesWrap=$('places');
 for(let i=0;i<places.length;i++){const p=places[i];const b=document.createElement('button');b.className='place';b.dataset.id=p.id;b.innerHTML='<span class="place-num">'+String(i+1).padStart(2,'0')+'</span><span class="place-text"><strong>'+p.title+'</strong><small>'+p.sub+'</small></span><span class="place-arr">↗</span>';b.addEventListener('click',()=>{teleport(p);closeMap();});placesWrap.appendChild(b)}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toast.timeout);toast.timeout=setTimeout(()=>$('toast').classList.remove('show'),2600)}
-function markVisited(p){visited.add(p.id);$('visitedCount').textContent=visited.size+' / 8';const b=document.querySelector('.place[data-id="'+p.id+'"]');if(b)b.classList.add('visited')}
+function markVisited(p){visited.add(p.id);$('visitedCount').textContent=visited.size+' / '+places.length;const b=document.querySelector('.place[data-id="'+p.id+'"]');if(b)b.classList.add('visited')}
 function teleport(p){
  const interiorTarget=['14','71','72'].includes(p.id);
  const destX=interiorTarget?(p.id==='72'?13.35:p.x):p.tx,destZ=interiorTarget?(p.id==='72'?-1.5:-13.55):p.tz;
  camera.position.set(destX,1.7,destZ);
  yaw=interiorTarget?0:Math.atan2(-(p.x-p.tx),-(p.z-p.tz));pitch=-.03;
- camera.rotation.set(pitch,yaw,0);$('areaTitle').innerHTML=p.id==='fuente'?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
+ camera.rotation.set(pitch,yaw,0);$('areaTitle').innerHTML=p.id==='tercero'?'El tercer patio<span>.</span>':p.id==='fuente'?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
  $('areaText').textContent=p.sub;markVisited(p);toast('DESTINO: '+p.title.toUpperCase());
 }
 function openInfo(p){paused=true;if(document.pointerLockElement)document.exitPointerLock();markVisited(p);$('storyIndex').textContent=String(places.indexOf(p)+1).padStart(2,'0')+' / 08';$('storyIcon').textContent=p.icon;$('storyCategory').textContent=p.cat;$('storyTitle').textContent=p.title;$('storyDesc').textContent=p.desc;$('modalBackdrop').classList.add('open');}
@@ -471,8 +474,11 @@ function allowed(x,z){
  if(x>4.95&&x<16.88&&z<=-20.10&&z>=-23.25)return true;
  // 4. Entrance into second patio. Aligned with the opening in the courtyard facade.
  if(x>14.9&&x<17.8&&z<=-23.15&&z>=-24.65)return true;
+ // Third patio connector and separate courtyard.
+ if(z<=-41.7&&z>=-49.72&&x>15.06&&x<17.74)return true;
+ if(z<-49.72&&z>-67.34&&x>3.7&&x<29.15)return true;
  // 5. Distinct second patio, 12 m east and 5 m further back.
- if(z<-24.3&&z>-41.7&&x>7.6&&x<25.25){
+ if(z<-24.3&&z>-42.5&&x>7.6&&x<25.25){
   if(Math.hypot(x-16.4,z+34.1)<2.55)return false;
   return true;
  }
@@ -505,13 +511,15 @@ function update(delta,t){
  for(const p of places){let dx=p.x-camera.position.x,dz=p.z-camera.position.z,dist=Math.hypot(dx,dz);if(dist<closest&&((dx*dir.x+dz*dir.z)/Math.max(dist,.1)>.1||dist<1.65)){nearby=p;closest=dist}}
  $('interaction').classList.toggle('active',!!nearby&&entered&&!paused);if(nearby)$('interactionTitle').textContent=nearby.title;
  const apt=whichApartment(camera.position.x,camera.position.z);
- const other=camera.position.z<-24.15&&camera.position.x>7.6&&!apt;
- $('locationLabel').textContent=apt?'INTERIOR · CASA '+apt:other?'SEGUNDO PATIO':camera.position.z<-11.5?'PASILLO ENTRE 71 Y 72':'PATIO PRINCIPAL';
- $('areaTitle').innerHTML=apt?'Dentro de la casa '+apt+'<span>.</span>':other?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
- $('areaText').textContent=apt==='72'?'Don Ramón y la Chilindrina · sala, comedor y dormitorio':apt==='14'?'Doña Florinda y Quico · recreación de época':apt==='71'?'Doña Clotilde · interior de interpretación artística':other?'Más allá del pasillo, otra historia.':'Un lugar pequeño. Un millón de historias.';
+ const third=camera.position.z<-49.6&&!apt;
+ const other=camera.position.z<-24.15&&camera.position.x>7.6&&!apt&&!third;
+ $('locationLabel').textContent=apt?'INTERIOR · CASA '+apt:third?'TERCER PATIO':other?'SEGUNDO PATIO':camera.position.z<-11.5?'PASILLO ENTRE 71 Y 72':'PATIO PRINCIPAL';
+ $('areaTitle').innerHTML=apt?'Dentro de la casa '+apt+'<span>.</span>':third?'El tercer patio<span>.</span>':other?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
+ $('areaText').textContent=apt==='72'?'Don Ramón y la Chilindrina · sala, comedor y dormitorio':apt==='14'?'Doña Florinda y Quico · recreación de época':apt==='71'?'Doña Clotilde · interior de interpretación artística':third?'Viviendas 15 · 16 · 8 · 87 — tercer recinto':other?'Más allá del pasillo, otra historia.':'Un lugar pequeño. Un millón de historias.';
  // Architectural map: first patio lower-left, dogleg hallway, separate patio upper-right.
  let mapX,mapY;
- if(other){mapX=242+(camera.position.x-7.25)*7.65;mapY=165+(camera.position.z+23.5)*7.2;}
+ if(third){mapX=82+(camera.position.x-3.7)*5.2;mapY=86+(camera.position.z+49.7)*3.4;}
+ else if(other){mapX=242+(camera.position.x-7.25)*7.65;mapY=165+(camera.position.z+23.5)*7.2;}
  else if(camera.position.z<-19.7&&camera.position.x>5.65&&!apt){mapX=142+(camera.position.x-5.65)*8.8;mapY=139+(camera.position.z+21.6)*7.8;}
  else if(camera.position.z<-11.5&&!apt){mapX=128+(camera.position.x-4.45)*6.8;mapY=205+(camera.position.z+11.5)*7.2;}
  else{mapX=22+(camera.position.x+11.45)*6.8;mapY=205+(camera.position.z+11.5)*7.2;}

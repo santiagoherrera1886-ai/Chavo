@@ -1,6 +1,16 @@
 # La Vecindad · Experiencia 3D
 Una visita en primera persona a una **recreación artística, no oficial** de la vecindad de *El Chavo del 8*, hecha con **Three.js** y JavaScript moderno.
 
+## Plano maestro de tres patios — Versión de maqueta (octubre 2026)
+
+Tomando las **tres imágenes aportadas por el usuario** como guía de relación entre volúmenes, rehíce la distribución. Ya no aparecen 14, 71 y 72 en la misma pared:
+
+- **Patio 1**: escaleras al 23 a la izquierda; puerta 14 al fondo; puerta 71 a la derecha de 14; **puerta 72 sobre el costado derecho, con fachada azul**. Su interior completo fue rotado/trasladado al lateral derecho sin perder los muebles. Barril en el patio.
+- **Patio 2**: patio separado con fuente, conectado por corredor en L; se puede explorar a pie.
+- **Patio 3**: recinto independiente conectado desde el patio 2 mediante un corredor; viviendas 15, 16, 8, 87 representadas como fachadas (sin interiores).
+- El mapa tiene botones para visitar los tres patios y muestra la casa 72 en el lateral.
+- Las proporciones son **interpretativas**, derivadas del croquis del usuario, la maqueta y las imágenes del modelo 3D; no son medidas oficiales de un decorado de Televisa.
+
 ## Plano y recorrido corregido (octubre 2026)
 
 La app **ya no ubica los patios uno detrás del otro como una plaza continua**. Ahora la visita recorre:

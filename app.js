@@ -113,7 +113,11 @@ const patio=box(26,.08,26,0,-.065,0,material('#a89c87'));patio.receiveShadow=tru
 for(let i=0;i<18;i++){const x=r(-11,11),z=r(-10,11);const stain=mesh(new THREE.CircleGeometry(r(.17,.6),12),new THREE.MeshBasicMaterial({color:'#777563',transparent:true,opacity:r(.03,.085),depthWrite:false}));stain.rotation.x=-Math.PI/2;stain.position.set(x,.014,z)}
 // First patio architecture: left wall, right wall, front with open entrance
 box(.48,7.2,27,-12.15,3.6,.2,greenStucco);
-box(.48,7.2,27,12.15,3.6,.2,ochre);
+// Side-wall house 72: blue lateral frontage with a physical entry opening.
+const rightBlue=new THREE.MeshStandardMaterial({map:texPlaster,color:'#74a7b8',roughness:1});
+box(.48,7.2,10.65,12.15,3.6,-8.025,rightBlue);
+box(.48,7.2,14.0,12.15,3.6,6.60,rightBlue);
+box(.48,4.5,1.84,12.15,5.10,-1.5,rightBlue);
 box(8.95,7.2,.5,-7.6,3.6,13.35,beige);
 box(8.95,7.2,.5,7.6,3.6,13.35,beige);
 box(6.35,2.45,.5,0,5.975,13.35,beige);
@@ -136,10 +140,8 @@ box(3.02,7.35,.55,1.64,3.675,-12.1,ochre);
 // lintels above door openings (2.85 m clearance)
 box(1.9,4.50,.55,-6.85,5.10,-12.1,greenStucco);
 box(1.9,4.50,.55,-.8,5.10,-12.1,ochre);
-// Casa 72 — opening around door 72
-box(2.09,7.35,.55,7.035,3.675,-12.1,ochre);
-box(2.28,7.35,.55,11.07,3.675,-12.1,ochre);
-box(1.85,4.50,.55,9.0,5.10,-12.1,ochre);
+// The building on the REAR wall ends next to the connecting passage.
+box(6.15,7.35,.55,9.08,3.675,-12.1,greenStucco);
 box(2.8,2.3,.55,4.3,6.2,-12.1,ochre);
 box(.34,4.2,.55,2.9,2.1,-12.1,beige);
 box(.34,4.2,.55,5.7,2.1,-12.1,ochre);
@@ -152,16 +154,16 @@ for(const xx of [-9.6,-4.6,.9,7.65,11.2]){box(.22,7.2,.67,xx,3.65,-11.87,materia
 box(4.27,.82,.11,-9.96,.42,-11.74,redStucco);
 box(4.11,.82,.11,-3.83,.42,-11.74,redStucco);
 box(2.99,.82,.11,1.63,.42,-11.74,redStucco);
-box(2.06,.82,.11,7.04,.42,-11.74,redStucco);
-box(2.23,.82,.11,11.08,.42,-11.74,redStucco);
+box(6.05,.82,.11,9.08,.42,-11.74,redStucco);
 box(.14,.83,26.5,-11.84,.42,0,redStucco);
-box(.14,.83,26.5,11.84,.42,0,redStucco);
+box(.14,.83,10.6,11.84,.42,-8.0,redStucco);
+box(.14,.83,13.95,11.84,.42,6.6,redStucco);
 // Door facades
 door(-6.85,-11.76,14,'#584a42');
 door(-.8,-11.76,71,'#584c47');
-door(9.0,-11.76,72,'#51483e');
+door(11.85,-1.5,72,'#51483e',0,-Math.PI/2);
 windowAt(-4.35,-11.75,1.55,0,2.1);
-windowAt(11.0,-11.75,1.22,0,2.3);
+windowAt(11.80,3.2,1.28,-Math.PI/2,2.3);
 windowAt(-7.6,13.02,1.6,Math.PI,3.95);
 // stairway to #23 at left
 const stairStone=material('#777574'),stairFront=material('#956955');
@@ -174,7 +176,7 @@ door(-9.75,-11.76,23,'#61514d',3.29);
 box(3.9,.27,1.2,-9.8,3.68,-11.6,material('#ad957a'));
 // Left facade details
 windowAt(-11.78,4.8,1.4,Math.PI/2,2.5);
-windowAt(11.78,2.1,1.9,-Math.PI/2,2.6);
+// Window on the right wall is now next to the lateral 72 entrance.
 box(25.8,.25,.7,0,6.15,-11.8,terracotta);
 for(let j=0;j<8;j++){const xx=-11.1+j*3.1;box(.08,1.75,.08,xx,5.6,-11.47,material('#9f8467'))}
 // barrels built via lathe with stave details
@@ -329,7 +331,7 @@ const places=[
 {id:'barril',title:'El barril del Chavo',sub:'Donde nacen las historias',cat:'EL RINCÓN MÁS QUERIDO',icon:'◉',x:-.45,z:-1.4,tx:0,tz:2.3,desc:'Mucho más que un barril: el refugio más famoso del patio. Una réplica artística de ese rincón donde el Chavo se escondía, pensaba y encontraba un poquito de tranquilidad.'},
 {id:'14',title:'Departamento 14',sub:'Doña Florinda y Quico',cat:'LOS VECINOS',icon:'14',x:-6.85,z:-11.6,tx:-6.6,tz:-7.6,desc:'Aquí viven Doña Florinda y Quico. La puerta número 14, entre visitas del Profesor Jirafales y tardes de patio, forma parte inseparable de los recuerdos de la serie.'},
 {id:'71',title:'Departamento 71',sub:'Doña Clotilde',cat:'LOS VECINOS',icon:'71',x:-.8,z:-11.6,tx:-.8,tz:-7.5,desc:'El hogar de Doña Clotilde, a quien los niños llamaban la Bruja del 71. Su puerta es uno de los lugares más reconocibles de la vecindad.'},
-{id:'72',title:'Departamento 72',sub:'Don Ramón y la Chilindrina',cat:'LOS VECINOS',icon:'72',x:9,z:-11.6,tx:8.6,tz:-7.4,desc:'Puedes entrar caminando: paredes verde menta, mesa de cuadros, dos sillones desgastados sobre bloques, televisor antiguo, cajonera, fotos, banderines, guitarra y una pequeña habitación de la Chilindrina. Reconstrucción inspirada en distintas épocas del programa.'},
+{id:'72',title:'Departamento 72',sub:'Don Ramón y la Chilindrina',cat:'LOS VECINOS',icon:'72',x:11.8,z:-1.5,tx:8.8,tz:-1.4,desc:'Puedes entrar caminando: paredes verde menta, mesa de cuadros, dos sillones desgastados sobre bloques, televisor antiguo, cajonera, fotos, banderines, guitarra y una pequeña habitación de la Chilindrina. Reconstrucción inspirada en distintas épocas del programa.'},
 {id:'23',title:'Las escaleras y el 23',sub:'Arriba del patio',cat:'LA ARQUITECTURA',icon:'↗',x:-9.2,z:-7.9,tx:-7.1,tz:-4.7,desc:'Las escaleras de concreto, con barandal de hierro, conducen al departamento 23. El interior de esta vivienda no se mostraba habitualmente en la serie.'},
 {id:'lavadero',title:'El lavadero',sub:'Historias entre cubetas',cat:'VIDA COTIDIANA',icon:'≈',x:-7.4,z:-9.7,tx:-5.0,tz:-7.8,desc:'El lavadero, las cubetas y las plantas recuerdan que la vecindad era un lugar de vida cotidiana, encuentros inesperados y pequeños enredos.'},
 {id:'pasillo',title:'El corredor de conexión',sub:'Avanza y gira a la derecha',cat:'PATIO 1 → PATIO 2',icon:'→',x:4.45,z:-20.7,tx:4.45,tz:-18.2,desc:'Entre los departamentos 71 y 72 se abre el paso al segundo patio. Atrévete a caminar por él: hay otra sorpresa esperándote al final.'},
@@ -346,7 +348,7 @@ function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clea
 function markVisited(p){visited.add(p.id);$('visitedCount').textContent=visited.size+' / 8';const b=document.querySelector('.place[data-id="'+p.id+'"]');if(b)b.classList.add('visited')}
 function teleport(p){
  const interiorTarget=['14','71','72'].includes(p.id);
- const destX=interiorTarget?p.x:p.tx,destZ=interiorTarget?-13.55:p.tz;
+ const destX=interiorTarget?(p.id==='72'?13.35:p.x):p.tx,destZ=interiorTarget?(p.id==='72'?-1.5:-13.55):p.tz;
  camera.position.set(destX,1.7,destZ);
  yaw=interiorTarget?0:Math.atan2(-(p.x-p.tx),-(p.z-p.tz));pitch=-.03;
  camera.rotation.set(pitch,yaw,0);$('areaTitle').innerHTML=p.id==='fuente'?'El otro patio<span>.</span>':'El patio de siempre<span>.</span>';
@@ -445,20 +447,22 @@ function whichApartment(x,z){
  if(z > -11.50||z < -19.01)return null;
  if(x>-10.83&&x<-3.79)return '14';
  if(x>-3.30&&x<2.42)return '71';
- if(x>6.12&&x<11.92)return '72';
+ if(x>12.14&&x<19.3&&z>-4.7&&z<1.65)return '72';
  return null;
 }
 function allowed(x,z){
- // 1. Main courtyard (the original with the barrel). Doors 14,71,72 share its rear facade.
- if(z>=-11.48&&z<=12.2&&x>=-11.45&&x<=11.45){
+ // 1. Main courtyard: 14 and 71 face the rear; 72 is on the RIGHT SIDE.
+ if(z>=-11.48&&z<=12.2&&x>=-11.45&&x<=11.78){
   if(x<-8.05 && z<-2.1 && z>-10.8)return false; // staircase footprint
   if(Math.hypot(x+.45,z+1.4)<1.09)return false; // barrel
   return true;
  }
  // Thresholds: doors 14, 71, 72 and the CORRIDOR opening, between 71 and 72.
  if(z>=-12.57&&z< -11.48){
-  return [[-6.85,.68],[-.8,.68],[9,.68],[4.45,1.13]].some(([cx,half])=>Math.abs(x-cx)<half);
+  return [[-6.85,.68],[-.8,.68],[4.45,1.13]].some(([cx,half])=>Math.abs(x-cx)<half);
  }
+ // Casa 72 has its own entrance along the blue east side.
+ if(x>=11.78&&x<12.34&&z>-2.2&&z<-.8)return true;
  // Rooms belong to first patio and cannot be reached by cutting through outer walls.
  if(whichApartment(x,z))return true;
  // 2. Narrow first corridor from the courtyard; turn RIGHT at its blind end.
